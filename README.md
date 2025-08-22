@@ -19,7 +19,7 @@
 <p>O site oferece as seguintes funcionalidades:</p>
 <ul>
     <li>
-        <strong>Funcionalidade 2:</strong> Lorem ipsum.
+        <strong>Funcionalidade 1:</strong> Lorem ipsum.
     </li>
     <li>
         <strong>Funcionalidade 2:</strong> Lorem ipsum.
