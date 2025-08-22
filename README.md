@@ -1,1 +1,74 @@
 # Grupo-9---Pesquisa-e-Inova-o
+
+<h1>Aplicação Client de Monitoramento do Hardware de PC's de Despacho do SAMU</h1>
+
+<h2>Sobre o Projeto</h2>
+<p>Este projeto é dedicado ao monitoramento de peças vitais de máquinas de despacho que fazem parte do sistema DAC (Despacho Assistido por Computador).</p>
+
+<h2>Justificativa</h2>
+<h3>Escolhi o Beach Tennis como tema do meu projeto individual por diversas razões:</h3>
+<ul>
+    <li>
+        <strong>Paixão pelo esporte:</strong> Como praticante e entusiasta, queria compartilhar meu conhecimento e amor por este esporte que cresce rapidamente no Brasil.
+    </li>
+    <li>
+        <strong>Esporte inclusivo:</strong> O Beach Tennis é acessível para pessoas de todas as idades e níveis de habilidade, promovendo saúde, diversão e socialização.
+    </li>
+    <li>
+        <strong>Crescimento no Brasil:</strong> Nos últimos anos, o Brasil se tornou uma potência mundial no esporte, com atletas brasileiros ocupando posições de destaque nos rankings internacionais.
+    </li>
+    <li>
+        <strong>Pouca visibilidade:</strong> Apesar do crescimento, ainda há pouca informação centralizada sobre o esporte em português, criando uma oportunidade para contribuir com a comunidade.
+    </li>
+
+</ul>
+<h2>Funcionalidades</h2>
+<p>O site oferece as seguintes funcionalidades:</p>
+<ul>
+    <li>
+        <strong>Página Inicial:</strong> Apresenta uma visão geral do Beach Tennis, incluindo história, regras e informações gerais.
+    </li>
+    <li>
+        <strong>Rankings:</strong> Exibe os principais atletas nos rankings mundiais masculino e feminino.
+    </li>
+    <li>
+        <strong>Quiz Interativo:</strong> Permite que os usuários testem seus conhecimentos sobre Beach Tennis através de um quiz interativo.
+    </li>
+    <li>
+        <strong>Sistema de Login/Cadastro:</strong> Permite que os usuários se cadastrem e façam login para acessar recursos exclusivos.
+    </li>
+    <li>
+        <strong>Localização de Quadras:</strong> Integração com mapas para encontrar quadras próximas ao usuário.
+    </li>
+
+</ul>
+
+<h2>Tecnologias Utilizadas</h2>
+<img src="{https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue}" />
+<img src="{https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E}" />
+<img src="{https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white}" />
+<img src="{https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white}" />
+<img src="{https://img.shields.io/badge/Amazon_Web_Services-FF9900?style=for-the-badge&logo=amazonwebservices&logoColor=white}" />
+<img src="{https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white}" />
+
+<h2>Como Executar o Projeto</h2>
+<p>Para executar o projeto localmente, siga as etapas abaixo:</p>
+<ol>
+    <li>
+        <strong>Clone o repositório:</strong> git clone https://github.com/mcsscalabrin/projeto-individual-1sisa.git
+    </li>
+    <li>
+        <strong>Instale as dependências:</strong> npm install
+    </li>
+    <li>
+        <strong>Configure o banco de dados:</strong> Crie um banco de dados MySQL e execute os scripts de criação de tabelas disponíveis em /sql.
+    </li>
+    <li>
+        <strong>Inicie o servidor:</strong> npm start
+    </li>
+    <li>
+        <strong>Acesse a aplicação pelo navegador: </strong> A aplicação irá rodar na porta 3333 (http://localhost:3333).
+    </li>
+</ol>
+<h2>Autor</h2>
+<p>O projeto foi desenvolvido por Matheus Chiosini Scalabrin - 1SISA.</p>
