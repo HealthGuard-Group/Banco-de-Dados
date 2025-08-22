@@ -43,8 +43,8 @@ CREATE TABLE Lote (
     REFERENCES Empresa(idEmpresa)
 );
 
-CREATE TABLE ComputadorDeDespacho (
-	idComputador INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE Maquina (
+	idMaquina INT PRIMARY KEY AUTO_INCREMENT,
     sistemaOperacional VARCHAR(45),
     marca VARCHAR(45),
     fkLote INT,
@@ -53,25 +53,29 @@ CREATE TABLE ComputadorDeDespacho (
 );
 
 CREATE TABLE Captura (
-	idCaptura INT PRIMARY KEY AUTO_INCREMENT,
+	fkMaquina INT,
+    fkComponente INT,
+	idCaptura INT,
     valor FLOAT,
     dtCaptura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    fkComputador INT,
-    FOREIGN KEY (fkComputador)
-    REFERENCES ComputadorDeDespacho(idComputador)
+    PRIMARY KEY (fkMaquina, fkComponente, idCaptura),
+    FOREIGN KEY (fkMaquina)
+    REFERENCES Maquina(idMaquina),
+    FOREIGN KEY (fkComponente)
+    REFERENCES Componente(idComponente)
 );
 
 CREATE TABLE Componente (
 	idComponente INT,
-    fkComputador INT,
+    fkMaquina INT,
     nome VARCHAR(45),
     tipo VARCHAR(45),
     capacidade VARCHAR(45),
     fabricante VARCHAR(45),
     preco DECIMAL(4,2),
-    PRIMARY KEY (idComponente, fkComputador),
-    FOREIGN KEY (fkComputador)
-    REFERENCES ComputadorDeDespacho(idComputador)
+    PRIMARY KEY (idComponente),
+    FOREIGN KEY (fkMaquina)
+    REFERENCES Maquina(idMaquina)
 );
 
 
