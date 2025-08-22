@@ -1,4 +1,4 @@
-# Grupo-9---Pesquisa-e-Inova-o
+# HealthGuard
 
 <h1>Aplicação Client de Monitoramento do Hardware de PC's de Despacho do SAMU</h1>
 
@@ -6,19 +6,12 @@
 <p>Este projeto é dedicado ao monitoramento de peças vitais de máquinas de despacho que fazem parte do sistema DAC (Despacho Assistido por Computador).</p>
 
 <h2>Justificativa</h2>
-<h3>Escolhi o Beach Tennis como tema do meu projeto individual por diversas razões:</h3>
 <ul>
     <li>
-        <strong>Paixão pelo esporte:</strong> Como praticante e entusiasta, queria compartilhar meu conhecimento e amor por este esporte que cresce rapidamente no Brasil.
+        <strong>Vidas estão em jogo:</strong> Qualquer atraso na máquina de despacho devido falhas de hardware inesperadas impacta diretamente em vidas.
     </li>
     <li>
-        <strong>Esporte inclusivo:</strong> O Beach Tennis é acessível para pessoas de todas as idades e níveis de habilidade, promovendo saúde, diversão e socialização.
-    </li>
-    <li>
-        <strong>Crescimento no Brasil:</strong> Nos últimos anos, o Brasil se tornou uma potência mundial no esporte, com atletas brasileiros ocupando posições de destaque nos rankings internacionais.
-    </li>
-    <li>
-        <strong>Pouca visibilidade:</strong> Apesar do crescimento, ainda há pouca informação centralizada sobre o esporte em português, criando uma oportunidade para contribuir com a comunidade.
+        <strong>Falta de monitoramento ativo:</strong> Atualmente, não existem soluções integradas com o sistema de DAC para assegurar e notificar o suporte de TI das centrais de atendimento do SAMU no caso de falhas de hardware.
     </li>
 
 </ul>
@@ -26,19 +19,19 @@
 <p>O site oferece as seguintes funcionalidades:</p>
 <ul>
     <li>
-        <strong>Página Inicial:</strong> Apresenta uma visão geral do Beach Tennis, incluindo história, regras e informações gerais.
+        <strong>Funcionalidade 2:</strong> Lorem ipsum.
     </li>
     <li>
-        <strong>Rankings:</strong> Exibe os principais atletas nos rankings mundiais masculino e feminino.
+        <strong>Funcionalidade 2:</strong> Lorem ipsum.
     </li>
     <li>
-        <strong>Quiz Interativo:</strong> Permite que os usuários testem seus conhecimentos sobre Beach Tennis através de um quiz interativo.
+        <strong>Funcionalidade 3:</strong> Lorem ipsum.
     </li>
     <li>
-        <strong>Sistema de Login/Cadastro:</strong> Permite que os usuários se cadastrem e façam login para acessar recursos exclusivos.
+        <strong>Funcionalidade 4:</strong> Lorem ipsum.
     </li>
     <li>
-        <strong>Localização de Quadras:</strong> Integração com mapas para encontrar quadras próximas ao usuário.
+        <strong>Funcionalidade 5:</strong> Lorem ipsum.
     </li>
 
 </ul>
@@ -55,7 +48,7 @@
 <p>Para executar o projeto localmente, siga as etapas abaixo:</p>
 <ol>
     <li>
-        <strong>Clone o repositório:</strong> git clone https://github.com/mcsscalabrin/projeto-individual-1sisa.git
+        <strong>Clone o repositório:</strong> git clone https://github.com/ryanservilha/Grupo-9.git
     </li>
     <li>
         <strong>Instale as dependências:</strong> npm install
@@ -71,4 +64,4 @@
     </li>
 </ol>
 <h2>Autor</h2>
-<p>O projeto foi desenvolvido por Matheus Chiosini Scalabrin - 1SISA.</p>
+<p>O projeto foi desenvolvido por Beatriz Carvalho, João Franco, Felipe Ferraz, Matheus Chiosini e Ryan Patric - 1SISA.</p>
