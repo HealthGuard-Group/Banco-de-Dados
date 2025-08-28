@@ -12,6 +12,11 @@ CREATE TABLE Usuario (
     REFERENCES Empresa(idEmpresa)
 );
 
+INSERT INTO Usuario (nome, email, senha, fkEmpresa)
+VALUES ("Felipe", "Felipe.ferraz@sptech.school", "SPTech2024", 1);
+
+
+
 CREATE TABLE Empresa (
 	idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
     razaoSocial VARCHAR(45),
@@ -25,6 +30,9 @@ CREATE TABLE Empresa (
     REFERENCES Endereco(idEndereco)
 );
 
+Insert into Empresa (razaoSocial, email, senha, telefone, cnpj, codigoEmpresa, fkEndereco) values
+("Serviços Integrados de Urgência e Emergência", "Samu192@segurança.com", "SAMU192", 11937131341, 51407659000106, 5555-9999, 1);
+
 CREATE TABLE Endereco (
 	idEndereco INT PRIMARY KEY AUTO_INCREMENT,
     logradouro VARCHAR(45),
@@ -33,6 +41,9 @@ CREATE TABLE Endereco (
     bairro VARCHAR(45),
     uf CHAR(2)
 );
+
+Insert into Endereco (logradouro, numero, cidade, bairro, uf) values
+("Avenida Paulista", 290, "São Paulo", "Bela vista", "SP");
 
 CREATE TABLE Lote (
 	idLote INT PRIMARY KEY AUTO_INCREMENT,
@@ -43,6 +54,11 @@ CREATE TABLE Lote (
     REFERENCES Empresa(idEmpresa)
 );
 
+
+
+Insert into Lote (dtRegistro, preco, fkEmpresa) Values
+("2025-08-28 14:15:07", 140.000, 1);
+
 CREATE TABLE Maquina (
 	idMaquina INT PRIMARY KEY AUTO_INCREMENT,
     sistemaOperacional VARCHAR(45),
@@ -51,6 +67,8 @@ CREATE TABLE Maquina (
     FOREIGN KEY (fkLote)
     REFERENCES Lote(idLote)
 );
+Insert into Maquina (sistemaOperacional, marca, fkLote) values
+("Linux", "Dell", 1);
 
 CREATE TABLE Componente (
 	idComponente INT,
@@ -65,6 +83,17 @@ CREATE TABLE Componente (
     REFERENCES Maquina(idMaquina)
 );
 
+INSERT INTO Componente (idComponente, fkMaquina, nome, tipo, capacidade, fabricante, preco)
+VALUES (1, 1, 'Memória RAM', 'Hardware', '16GB DDR4', 'Kingston', 29.99);
+
+INSERT INTO Componente (idComponente, fkMaquina, nome, tipo, capacidade, fabricante, preco)
+VALUES 
+(2, 1, 'Disco Rígido', 'Hardware', '1TB', 'Seagate', 99.00),
+(3, 1, 'Placa de Rede', 'Hardware', '1Gbps', 'Intel', 80.00),
+(4, 1, 'Processador', 'Hardware', 'Intel i7', 'Intel', 10.00);
+
+
+
 CREATE TABLE Captura (
     idCaptura INT,
 	fkComponente INT,
@@ -77,4 +106,32 @@ CREATE TABLE Captura (
 
 
 
+SELECT 
+    u.nome              AS Usuario,
+    e.razaoSocial       AS Empresa,
+    m.marca             AS Maquina,
+    m.sistemaOperacional AS SistemaOperacional,
+    c.nome              AS Componente,
+    cap.GB_EM_USO           AS "GigaBytes EM USO",
+    cap.GB_LIVRE          AS "GigaBytes Livre",
+    cap.Porcentagem_DE_USO          AS "Porcentagem EM USO",
+    cap.dtCaptura       AS DataCaptura
+FROM Usuario u
+JOIN Empresa e     ON u.fkEmpresa = e.idEmpresa
+JOIN Lote l        ON e.idEmpresa = l.fkEmpresa
+JOIN Maquina m     ON l.idLote = m.fkLote
+JOIN Componente c  ON m.idMaquina = c.fkMaquina
+LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente
+LIMIT 0, 500;
 
+
+
+
+select * from componente;
+
+-- Apaga todos os registros que foram inseridos na CPU
+DELETE FROM captura WHERE fkComponente = 1;
+
+
+
+select * from captura;
