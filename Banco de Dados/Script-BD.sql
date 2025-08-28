@@ -1,6 +1,6 @@
-CREATE DATABASE grupo9;
+CREATE DATABASE healthguard;
 
-USE grupo9;
+USE healthguard;
 
 CREATE TABLE Usuario (
 	idUsuario INT PRIMARY KEY AUTO_INCREMENT,
@@ -52,19 +52,6 @@ CREATE TABLE Maquina (
     REFERENCES Lote(idLote)
 );
 
-CREATE TABLE Captura (
-	fkMaquina INT,
-    fkComponente INT,
-	idCaptura INT,
-    valor FLOAT,
-    dtCaptura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (fkMaquina, fkComponente, idCaptura),
-    FOREIGN KEY (fkMaquina)
-    REFERENCES Maquina(idMaquina),
-    FOREIGN KEY (fkComponente)
-    REFERENCES Componente(idComponente)
-);
-
 CREATE TABLE Componente (
 	idComponente INT,
     fkMaquina INT,
@@ -73,10 +60,21 @@ CREATE TABLE Componente (
     capacidade VARCHAR(45),
     fabricante VARCHAR(45),
     preco DECIMAL(4,2),
-    PRIMARY KEY (idComponente),
+    PRIMARY KEY (idComponente, fkMaquina),
     FOREIGN KEY (fkMaquina)
     REFERENCES Maquina(idMaquina)
 );
+
+CREATE TABLE Captura (
+    idCaptura INT,
+	fkComponente INT,
+    valor FLOAT,
+    dtCaptura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (idCaptura, fkComponente),
+    FOREIGN KEY (fkComponente)
+    REFERENCES Componente(idComponente)
+);
+
 
 
 
