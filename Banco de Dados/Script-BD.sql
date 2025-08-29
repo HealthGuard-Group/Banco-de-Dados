@@ -1,3 +1,4 @@
+
 CREATE DATABASE healthguard;
 
 USE healthguard;
@@ -105,33 +106,73 @@ CREATE TABLE Captura (
 );
 
 
+-- Select dos dados importantes para vizualização da Inserção no Banco de Dados
+SELECT 
+u.nome              AS Usuario,
+e.razaoSocial       AS Empresa,
+m.marca             AS Maquina,
+m.sistemaOperacional AS SistemaOperacional,
+c.nome              AS Componente,
+CONCAT(ROUND(cap.GB_EM_USO, 1), " GB")          AS "GigaBytes EM USO",
+CONCAT(ROUND(GB_LIVRE, 2), " GB" )       AS "GigaBytes Livre",
+CONCAT(cap.Porcentagem_DE_USO, "%")          AS "Porcentagem EM USO",
+cap.dtCaptura       AS DataCaptura
+FROM Usuario u
+JOIN Empresa e     ON u.fkEmpresa = e.idEmpresa
+JOIN Lote l        ON e.idEmpresa = l.fkEmpresa
+JOIN Maquina m     ON l.idLote = m.fkLote
+JOIN Componente c  ON m.idMaquina = c.fkMaquina
+LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente;
+
+
+
+-- Select para ver porcentagem Da memoria
 
 SELECT 
-    u.nome              AS Usuario,
-    e.razaoSocial       AS Empresa,
-    m.marca             AS Maquina,
-    m.sistemaOperacional AS SistemaOperacional,
-    c.nome              AS Componente,
-    cap.GB_EM_USO           AS "GigaBytes EM USO",
-    cap.GB_LIVRE          AS "GigaBytes Livre",
-    cap.Porcentagem_DE_USO          AS "Porcentagem EM USO",
-    cap.dtCaptura       AS DataCaptura
+u.nome              AS Usuario,
+e.razaoSocial       AS Empresa,
+m.marca             AS Maquina,
+m.sistemaOperacional AS SistemaOperacional,
+c.nome   AS Componente,
+CONCAT(ROUND(cap.GB_EM_USO, 1), " GB")          AS "GigaBytes EM USO",
+CONCAT(ROUND(GB_LIVRE, 2), " GB" )       AS "GigaBytes Livre",
+cap.dtCaptura       AS DataCaptura
 FROM Usuario u
 JOIN Empresa e     ON u.fkEmpresa = e.idEmpresa
 JOIN Lote l        ON e.idEmpresa = l.fkEmpresa
 JOIN Maquina m     ON l.idLote = m.fkLote
 JOIN Componente c  ON m.idMaquina = c.fkMaquina
 LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente
-LIMIT 0, 500;
+where c.nome = "Memoria RAM";
+
+-- Select para ver dados da cpu
+
+SELECT 
+u.nome              AS Usuario,
+e.razaoSocial       AS Empresa,
+m.marca             AS Maquina,
+m.sistemaOperacional AS SistemaOperacional,
+c.nome   AS Componente,
+CONCAT(cap.Porcentagem_DE_USO, "%")          AS "Porcentagem EM USO",
+cap.dtCaptura       AS DataCaptura
+FROM Usuario u
+JOIN Empresa e     ON u.fkEmpresa = e.idEmpresa
+JOIN Lote l        ON e.idEmpresa = l.fkEmpresa
+JOIN Maquina m     ON l.idLote = m.fkLote
+JOIN Componente c  ON m.idMaquina = c.fkMaquina
+LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente
+where c.nome = "Processador";
 
 
-
-
-select * from componente;
 
 -- Apaga todos os registros que foram inseridos na CPU
 DELETE FROM captura WHERE fkComponente = 1;
 
 
 
-select * from captura;
+
+
+
+
+
+
