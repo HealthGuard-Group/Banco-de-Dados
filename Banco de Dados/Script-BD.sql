@@ -85,17 +85,35 @@ INSERT INTO Componente (idComponente, fkMaquina, nome, tipo, capacidade, fabrica
 (default, 1, 'Disco Rígido', 'Hardware', '1TB', 'Seagate', 99.00),
 (default, 1, 'Processador', 'Hardware', 'Intel i7', 'Intel', 10.00);
 
+CREATE TABLE Nucleo (
+	idNucleo INT,
+    fkComponente INT,
+    fkComponenteMaquina INT, 
+    numeroNucleo INT,
+    PRIMARY KEY (idNucleo, fkComponente, fkComponenteMaquina),
+    FOREIGN KEY (fkComponente)
+    REFERENCES Componente(idComponente),
+    FOREIGN KEY (fkComponenteMaquina)
+    REFERENCES Componente(fkMaquina)
+);
+
 CREATE TABLE Captura (
     idCaptura INT,
 	fkComponente INT,
+    fkComponenteMaquina INT, 
+    fkNucleo INT,
     gbLivre FLOAT,
     gbEmUso FLOAT,
     porcentagemDeUso FLOAT,
     hostname VARCHAR(45),
     dtCaptura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (idCaptura, fkComponente),
+    PRIMARY KEY (idCaptura, fkComponente, fkComponenteMaquina),
     FOREIGN KEY (fkComponente)
-    REFERENCES Componente(idComponente)
+    REFERENCES Componente(idComponente),
+    FOREIGN KEY (fkComponenteMaquina)
+    REFERENCES Componente(fkMaquina),
+    FOREIGN KEY (fkNucleo)
+    REFERENCES Nucleo(idNucleo)
 );
 
 
@@ -154,3 +172,6 @@ JOIN Maquina m     ON l.idLote = m.fkLote
 JOIN Componente c  ON m.idMaquina = c.fkMaquina
 LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente
 where c.nome = "Processador";
+
+
+
