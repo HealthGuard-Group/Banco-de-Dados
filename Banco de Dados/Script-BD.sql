@@ -87,31 +87,39 @@ INSERT INTO Componente (idComponente, fkMaquina, nome, tipo, capacidade, fabrica
 
 CREATE TABLE Nucleo (
 	idNucleo INT,
-    fkComponente INT,
-    fkComponenteMaquina INT, 
+    fkComponente INT, 
     numeroNucleo INT,
-    PRIMARY KEY (idNucleo, fkComponente, fkComponenteMaquina),
+    PRIMARY KEY (idNucleo, fkComponente),
     FOREIGN KEY (fkComponente)
-    REFERENCES Componente(idComponente),
-    FOREIGN KEY (fkComponenteMaquina)
-    REFERENCES Componente(fkMaquina)
+    REFERENCES Componente(idComponente)
 );
 
+INSERT INTO Nucleo (idNucleo, fkComponente, numeroNucleo) VALUES
+(1, 3, 1),
+(2, 3, 2),
+(3, 3, 3),
+(4, 3, 4),
+(5, 3, 5),
+(6, 3, 6),
+(7, 3, 7),
+(8, 3, 8),
+(9, 3, 9),
+(10, 3, 10),
+(11, 3, 11),
+(12, 3, 12);
+
 CREATE TABLE Captura (
-    idCaptura INT,
+    idCaptura INT AUTO_INCREMENT,
 	fkComponente INT,
-    fkComponenteMaquina INT, 
     fkNucleo INT,
     gbLivre FLOAT,
     gbEmUso FLOAT,
     porcentagemDeUso FLOAT,
     hostname VARCHAR(45),
     dtCaptura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (idCaptura, fkComponente, fkComponenteMaquina),
+    PRIMARY KEY (idCaptura, fkComponente),
     FOREIGN KEY (fkComponente)
     REFERENCES Componente(idComponente),
-    FOREIGN KEY (fkComponenteMaquina)
-    REFERENCES Componente(fkMaquina),
     FOREIGN KEY (fkNucleo)
     REFERENCES Nucleo(idNucleo)
 );
@@ -172,6 +180,4 @@ JOIN Maquina m     ON l.idLote = m.fkLote
 JOIN Componente c  ON m.idMaquina = c.fkMaquina
 LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente
 where c.nome = "Processador";
-
-
 
