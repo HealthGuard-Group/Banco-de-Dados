@@ -1,4 +1,5 @@
 CREATE DATABASE healthguard;
+
 USE healthguard;
 
 CREATE TABLE Endereco (
@@ -127,21 +128,27 @@ CREATE TABLE Captura (
 
 -- Select dos dados importantes para vizualização da Inserção no Banco de Dados
 SELECT 
-u.nome              AS Usuario,
-e.razaoSocial       AS Empresa,
-m.marca             AS Maquina,
-m.sistemaOperacional AS SistemaOperacional,
-c.nome              AS Componente,
-CONCAT(ROUND(cap.gbEmUso, 1), " GB")          AS "GigaBytes EM USO",
-CONCAT(ROUND(gbLivre, 2), " GB" )       AS "GigaBytes Livre",
-CONCAT(cap.porcentagemDeUso, "%")          AS "Porcentagem EM USO",
-cap.dtCaptura       AS DataCaptura
+    u.nome                 AS Usuario,
+    e.razaoSocial          AS Empresa,
+    m.marca                AS Maquina,
+    m.sistemaOperacional   AS SistemaOperacional,
+    c.nome                 AS Componente,
+    n.numeroNucleo         AS Nucleo,
+    CONCAT(ROUND(cap.gbEmUso, 1), " GB")  AS "GigaBytes EM USO",
+    CONCAT(ROUND(cap.gbLivre, 2), " GB") AS "GigaBytes Livre",
+    CONCAT(cap.porcentagemDeUso, "%")    AS "Porcentagem EM USO",
+    cap.dtCaptura          AS DataCaptura
 FROM Usuario u
-JOIN Empresa e     ON u.fkEmpresa = e.idEmpresa
-JOIN Lote l        ON e.idEmpresa = l.fkEmpresa
-JOIN Maquina m     ON l.idLote = m.fkLote
-JOIN Componente c  ON m.idMaquina = c.fkMaquina
-LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente;
+JOIN Empresa e      ON u.fkEmpresa = e.idEmpresa
+JOIN Lote l         ON e.idEmpresa = l.fkEmpresa
+JOIN Maquina m      ON l.idLote = m.fkLote
+JOIN Componente c   ON m.idMaquina = c.fkMaquina
+JOIN Nucleo n       ON c.idComponente = n.fkComponente
+LEFT JOIN Captura cap
+    ON c.idComponente = cap.fkComponente
+   AND n.idNucleo = cap.fkNucleo
+ORDER BY cap.dtCaptura DESC, n.numeroNucleo;
+
 
 
 
@@ -181,6 +188,8 @@ JOIN Componente c  ON m.idMaquina = c.fkMaquina
 LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente
 where c.nome = "Processador";
 
+
+-- select para ver dados da CPU
 SELECT 
 u.nome              AS Usuario,
 e.razaoSocial       AS Empresa,
@@ -197,5 +206,32 @@ JOIN Lote l        ON e.idEmpresa = l.fkEmpresa
 JOIN Maquina m     ON l.idLote = m.fkLote
 JOIN Componente c  ON m.idMaquina = c.fkMaquina
 LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente
-where c.nome = "Disco Rígido"; 
+where c.nome = "Disco Rígido";
+
+
+-- Select para ver p% de cada nucleo
+
+SELECT 
+    u.nome              AS Usuario,
+    e.razaoSocial       AS Empresa,
+    m.marca             AS Maquina,
+    m.sistemaOperacional AS SistemaOperacional,
+    c.nome              AS Componente,
+    n.numeroNucleo      AS Nucleo,
+    CONCAT(cap.porcentagemDeUso, "%") AS "Porcentagem EM USO",
+    cap.dtCaptura       AS DataCaptura
+FROM Usuario u
+JOIN Empresa e     ON u.fkEmpresa = e.idEmpresa
+JOIN Lote l        ON e.idEmpresa = l.fkEmpresa
+JOIN Maquina m     ON l.idLote = m.fkLote
+JOIN Componente c  ON m.idMaquina = c.fkMaquina
+JOIN Nucleo n      ON c.idComponente = n.fkComponente
+LEFT JOIN Captura cap   
+    ON c.idComponente = cap.fkComponente
+   AND n.idNucleo = cap.fkNucleo
+WHERE c.nome = "Processador"
+ORDER BY cap.dtCaptura DESC, n.numeroNucleo;
+
+
+
 
