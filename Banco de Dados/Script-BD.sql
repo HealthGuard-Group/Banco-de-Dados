@@ -181,3 +181,21 @@ JOIN Componente c  ON m.idMaquina = c.fkMaquina
 LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente
 where c.nome = "Processador";
 
+SELECT 
+u.nome              AS Usuario,
+e.razaoSocial       AS Empresa,
+m.marca             AS Maquina,
+m.sistemaOperacional AS SistemaOperacional,
+c.nome   AS Componente,
+CONCAT(cap.porcentagemDeUso, "%")          AS "Porcentagem EM USO",
+CONCAT(ROUND(cap.gbEmUso, 1), " GB")          AS "GigaBytes EM USO",
+CONCAT(ROUND(cap.gbLivre, 2), " GB" )       AS "GigaBytes Livre",
+cap.dtCaptura       AS DataCaptura
+FROM Usuario u
+JOIN Empresa e     ON u.fkEmpresa = e.idEmpresa
+JOIN Lote l        ON e.idEmpresa = l.fkEmpresa
+JOIN Maquina m     ON l.idLote = m.fkLote
+JOIN Componente c  ON m.idMaquina = c.fkMaquina
+LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente
+where c.nome = "Disco Rígido"; 
+
