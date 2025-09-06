@@ -19,19 +19,19 @@
 <p>O site oferece as seguintes funcionalidades:</p>
 <ul>
     <li>
-        <strong>Funcionalidade 1:</strong> Lorem ipsum.
+        <strong>Funcionalidade 1:</strong> Registro histórico de desempenho e falhas
     </li>
     <li>
-        <strong>Funcionalidade 2:</strong> Lorem ipsum.
+        <strong>Funcionalidade 2:</strong> Monitoramento em tempo real do hardware
     </li>
     <li>
-        <strong>Funcionalidade 3:</strong> Lorem ipsum.
+        <strong>Funcionalidade 3:</strong> Histórico e análise de performance
     </li>
     <li>
-        <strong>Funcionalidade 4:</strong> Lorem ipsum.
+        <strong>Funcionalidade 4:</strong> Controle de acesso e segurança
     </li>
     <li>
-        <strong>Funcionalidade 5:</strong> Lorem ipsum.
+        <strong>Funcionalidade 5:</strong> Relatórios gerenciais e métricas estratégicas
     </li>
 
 </ul>
