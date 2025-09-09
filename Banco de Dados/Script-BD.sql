@@ -1,6 +1,17 @@
 CREATE DATABASE healthguard;
-
 USE healthguard;
+
+
+CREATE TABLE Empresa (
+	idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
+    razaoSocial VARCHAR(45),
+    telefone CHAR(11),
+    cnpj CHAR(14),
+    email VARCHAR(45)
+);
+
+Insert into Empresa (razaoSocial, telefone, cnpj, email) values
+("Serviços Integrados de Urgência e Emergência", 11937131341, 51407659000106, "healthguard@gmail.com");
 
 CREATE TABLE Endereco (
 	idEndereco INT PRIMARY KEY AUTO_INCREMENT,
@@ -15,58 +26,84 @@ Insert into Endereco (logradouro, numero, cidade, bairro, uf) values
 ("Avenida Paulista", 290, "São Paulo", "Bela vista", "SP");
 
 
-CREATE TABLE Empresa (
-	idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
-    razaoSocial VARCHAR(45),
-    email VARCHAR(45),
-    senha VARCHAR(45),
-    telefone CHAR(11),
-    cnpj CHAR(14),
-    codigoEmpresa CHAR(8),
+CREATE TABLE CentralAtendimento (
+	idCentral INT AUTO_INCREMENT,
+    fkEmpresa INT,
     fkEndereco INT,
-    FOREIGN KEY (fkEndereco)
-    REFERENCES Endereco(idEndereco)
+    nome VARCHAR(45),
+    codigoCentral INT, 
+    email VARCHAR(45),
+    telefone CHAR(11),
+    PRIMARY KEY (idCentral, fkEmpresa),
+    FOREIGN KEY (fkEmpresa)
+    REFERENCES Empresa (idEmpresa)
 );
 
-Insert into Empresa (razaoSocial, email, senha, telefone, cnpj, codigoEmpresa, fkEndereco) values
-("Serviços Integrados de Urgência e Emergência", "Samu192@segurança.com", "SAMU192", 11937131341, 51407659000106, 5555-9999, 1);
+INSERT INTO CentralAtendimento (fkEmpresa, fkEndereco, nome, codigoCentral, email, telefone) VALUES
+(1, 1, "Salvando Vidas", 1212, "salvando@gmail.com", 11910887786);
 
 CREATE TABLE Usuario (
 	idUsuario INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45),
     email VARCHAR(45),
     senha VARCHAR(45),
-    fkEmpresa INT,
-    FOREIGN KEY (fkEmpresa)
-    REFERENCES Empresa(idEmpresa)
+    telefone CHAR(11),
+    fkCentral INT,
+    FOREIGN KEY (fkCentral)
+    REFERENCES CentralAtendimento(idCentral)
 );
 
-INSERT INTO Usuario (nome, email, senha, fkEmpresa)
-VALUES ("Felipe", "Felipe.ferraz@sptech.school", "SPTech2024", 1);
+INSERT INTO Usuario (nome, email, senha, telefone, fkCentral) VALUES 
+("Felipe", "Felipe.ferraz@sptech.school", "SPTech2024", "11931548458", 1);
 
-CREATE TABLE Lote (
-	idLote INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE Permissao (
+	idPermissao INT PRIMARY KEY AUTO_INCREMENT,
+    tipo VARCHAR(45),
+    descricao VARCHAR(100)
+);
+
+INSERT INTO Permissao (tipo, descricao) VALUES
+("ROOT", "Excluir usuários");
+
+CREATE TABLE UsuarioPermissao (
+	fkUsuario INT,
+    fkPermissao INT,
+    PRIMARY KEY (fkUsuario, fkPermissao),
+    FOREIGN KEY (fkUsuario)
+    REFERENCES Usuario(idUsuario),
+    FOREIGN KEY (fkPermissao)
+    REFERENCES Permissao(idPermissao)
+);
+
+INSERT INTO UsuarioPermissao (fkUsuario, fkPermissao) VALUES
+(1,1);
+
+CREATE TABLE CompraMaquina (
+	idCompra INT PRIMARY KEY AUTO_INCREMENT, 
+    fkCentral INT,
     dtRegistro DATETIME,
-	preco DECIMAL(5,2),
-    fkEmpresa INT,
-    FOREIGN KEY (fkEmpresa)
-    REFERENCES Empresa(idEmpresa)
+    preco DECIMAL(6,2),
+    quantidade INT,
+    notaFiscal VARCHAR(50),
+    FOREIGN KEY (fkCentral)
+    REFERENCES CentralAtendimento (idCentral)
 );
 
-Insert into Lote (dtRegistro, preco, fkEmpresa) Values
-("2025-08-28 14:15:07", 140.000, 1);
+INSERT INTO CompraMaquina (fkCentral, dtRegistro, preco, quantidade, notaFiscal) VALUES
+(1, "2025-09-08 20:00:00", 1000.0, 50, "0000011910887786");
 
 CREATE TABLE Maquina (
 	idMaquina INT PRIMARY KEY AUTO_INCREMENT,
     sistemaOperacional VARCHAR(45),
     marca VARCHAR(45),
-    fkLote INT,
-    FOREIGN KEY (fkLote)
-    REFERENCES Lote(idLote)
+    modelo VARCHAR(45),
+    fkCompra INT,
+    FOREIGN KEY (fkCompra)
+    REFERENCES CompraMaquina(idCompra)
 );
 
-Insert into Maquina (sistemaOperacional, marca, fkLote) values
-("Linux", "Dell", 1);
+Insert into Maquina (sistemaOperacional, marca, modelo ,fkCompra) values
+("Linux", "Dell", "Inspiron 15", 1);
 
 CREATE TABLE Componente (
 	idComponente INT auto_increment,
@@ -86,33 +123,9 @@ INSERT INTO Componente (idComponente, fkMaquina, nome, tipo, capacidade, fabrica
 (default, 1, 'Disco Rígido', 'Hardware', '1TB', 'Seagate', 99.00),
 (default, 1, 'Processador', 'Hardware', 'Intel i7', 'Intel', 10.00);
 
-CREATE TABLE Nucleo (
-	idNucleo INT,
-    fkComponente INT, 
-    numeroNucleo INT,
-    PRIMARY KEY (idNucleo, fkComponente),
-    FOREIGN KEY (fkComponente)
-    REFERENCES Componente(idComponente)
-);
-
-INSERT INTO Nucleo (idNucleo, fkComponente, numeroNucleo) VALUES
-(1, 3, 1),
-(2, 3, 2),
-(3, 3, 3),
-(4, 3, 4),
-(5, 3, 5),
-(6, 3, 6),
-(7, 3, 7),
-(8, 3, 8),
-(9, 3, 9),
-(10, 3, 10),
-(11, 3, 11),
-(12, 3, 12);
-
 CREATE TABLE Captura (
     idCaptura INT AUTO_INCREMENT,
 	fkComponente INT,
-    fkNucleo INT,
     gbLivre FLOAT,
     gbEmUso FLOAT,
     porcentagemDeUso FLOAT,
@@ -120,35 +133,44 @@ CREATE TABLE Captura (
     dtCaptura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (idCaptura, fkComponente),
     FOREIGN KEY (fkComponente)
-    REFERENCES Componente(idComponente),
-    FOREIGN KEY (fkNucleo)
-    REFERENCES Nucleo(idNucleo)
+    REFERENCES Componente(idComponente)
 );
+
+
+CREATE TABLE Alerta (
+	idAlerta INT,
+    fkCaptura INT,
+    tipo VARCHAR(45), 
+    nivel VARCHAR(25),
+    mensagem VARCHAR(80),
+    status VARCHAR(45),
+    dtEmissao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (idAlerta, fkCaptura),
+    FOREIGN KEY (fkCaptura)
+    REFERENCES Captura(idCaptura)
+);
+
+
+-- AJUSTAR SELECTS!!!!!!!!!!!
 
 
 -- Select dos dados importantes para vizualização da Inserção no Banco de Dados
 SELECT 
-    u.nome                 AS Usuario,
-    e.razaoSocial          AS Empresa,
-    m.marca                AS Maquina,
-    m.sistemaOperacional   AS SistemaOperacional,
-    c.nome                 AS Componente,
-    n.numeroNucleo         AS Nucleo,
-    CONCAT(ROUND(cap.gbEmUso, 1), " GB")  AS "GigaBytes EM USO",
-    CONCAT(ROUND(cap.gbLivre, 2), " GB") AS "GigaBytes Livre",
-    CONCAT(cap.porcentagemDeUso, "%")    AS "Porcentagem EM USO",
-    cap.dtCaptura          AS DataCaptura
+u.nome              AS Usuario,
+e.razaoSocial       AS Empresa,
+m.marca             AS Maquina,
+m.sistemaOperacional AS SistemaOperacional,
+c.nome              AS Componente,
+CONCAT(ROUND(cap.gbEmUso, 1), " GB")          AS "GigaBytes EM USO",
+CONCAT(ROUND(gbLivre, 2), " GB" )       AS "GigaBytes Livre",
+CONCAT(cap.porcentagemDeUso, "%")          AS "Porcentagem EM USO",
+cap.dtCaptura       AS DataCaptura
 FROM Usuario u
-JOIN Empresa e      ON u.fkEmpresa = e.idEmpresa
-JOIN Lote l         ON e.idEmpresa = l.fkEmpresa
-JOIN Maquina m      ON l.idLote = m.fkLote
-JOIN Componente c   ON m.idMaquina = c.fkMaquina
-JOIN Nucleo n       ON c.idComponente = n.fkComponente
-LEFT JOIN Captura cap
-    ON c.idComponente = cap.fkComponente
-   AND n.idNucleo = cap.fkNucleo
-ORDER BY cap.dtCaptura DESC, n.numeroNucleo;
-
+JOIN Empresa e     ON u.fkEmpresa = e.idEmpresa
+JOIN Lote l        ON e.idEmpresa = l.fkEmpresa
+JOIN Maquina m     ON l.idLote = m.fkLote
+JOIN Componente c  ON m.idMaquina = c.fkMaquina
+LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente;
 
 
 
@@ -188,50 +210,4 @@ JOIN Componente c  ON m.idMaquina = c.fkMaquina
 LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente
 where c.nome = "Processador";
 
-
--- select para ver dados da CPU
-SELECT 
-u.nome              AS Usuario,
-e.razaoSocial       AS Empresa,
-m.marca             AS Maquina,
-m.sistemaOperacional AS SistemaOperacional,
-c.nome   AS Componente,
-CONCAT(cap.porcentagemDeUso, "%")          AS "Porcentagem EM USO",
-CONCAT(ROUND(cap.gbEmUso, 1), " GB")          AS "GigaBytes EM USO",
-CONCAT(ROUND(cap.gbLivre, 2), " GB" )       AS "GigaBytes Livre",
-cap.dtCaptura       AS DataCaptura
-FROM Usuario u
-JOIN Empresa e     ON u.fkEmpresa = e.idEmpresa
-JOIN Lote l        ON e.idEmpresa = l.fkEmpresa
-JOIN Maquina m     ON l.idLote = m.fkLote
-JOIN Componente c  ON m.idMaquina = c.fkMaquina
-LEFT JOIN Captura cap   ON c.idComponente = cap.fkComponente
-where c.nome = "Disco Rígido";
-
-
--- Select para ver p% de cada nucleo
-
-SELECT 
-    u.nome              AS Usuario,
-    e.razaoSocial       AS Empresa,
-    m.marca             AS Maquina,
-    m.sistemaOperacional AS SistemaOperacional,
-    c.nome              AS Componente,
-    n.numeroNucleo      AS Nucleo,
-    CONCAT(cap.porcentagemDeUso, "%") AS "Porcentagem EM USO",
-    cap.dtCaptura       AS DataCaptura
-FROM Usuario u
-JOIN Empresa e     ON u.fkEmpresa = e.idEmpresa
-JOIN Lote l        ON e.idEmpresa = l.fkEmpresa
-JOIN Maquina m     ON l.idLote = m.fkLote
-JOIN Componente c  ON m.idMaquina = c.fkMaquina
-JOIN Nucleo n      ON c.idComponente = n.fkComponente
-LEFT JOIN Captura cap   
-    ON c.idComponente = cap.fkComponente
-   AND n.idNucleo = cap.fkNucleo
-WHERE c.nome = "Processador"
-ORDER BY cap.dtCaptura DESC, n.numeroNucleo;
-
-
-
-
+select * from captura;
