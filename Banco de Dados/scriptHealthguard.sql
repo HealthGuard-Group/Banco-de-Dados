@@ -148,15 +148,16 @@ CREATE TABLE Parametro (
 );
 
 
-
+CREATE VIEW vw_cpu AS
 SELECT 
-                    u.nome AS Usuario,
+				u.nome AS Usuario,
                     c.nome AS Central,
                     m.marca AS Maquina,
                     m.sistemaOperacional AS SistemaOperacional,
                     co.nome AS Componente,
                     CONCAT(cap.porcentagemDeUso, "%") AS Percentual,
-                    cap.dtCaptura AS DataCaptura
+                    cap.dtCaptura AS DataCaptura,
+                      cap.hostname
                 FROM Usuario u
                 JOIN CentralAtendimento c ON u.fkCentral = c.idCentral
                 JOIN Maquina m ON m.fkCentral = c.idCentral
@@ -164,16 +165,20 @@ SELECT
                 LEFT JOIN Captura cap ON co.idComponente = cap.fkComponente
                 WHERE co.nome = "Processador"
                 ORDER BY cap.dtCaptura DESC;
-
-					SELECT 
-                    u.nome AS Usuario,
+                
+select * from vw_cpu;
+                
+CREATE VIEW vw_memoria_ram AS
+	SELECT 
+				u.nome AS Usuario,
                     c.nome AS Central,
                     m.marca AS Maquina,
                     m.sistemaOperacional AS SistemaOperacional,
                     co.nome AS Componente,
                     CONCAT(cap.gbLivre, " GB") AS MemoriaLivre,
                     CONCAT(cap.gbEmUso, " GB") AS MemoriaEmUso,
-                    cap.dtCaptura AS DataCaptura
+                    cap.dtCaptura AS DataCaptura,
+                      cap.hostname
                 FROM Usuario u
                 JOIN CentralAtendimento c ON u.fkCentral = c.idCentral
                 JOIN Maquina m ON m.fkCentral = c.idCentral
@@ -181,23 +186,30 @@ SELECT
                 LEFT JOIN Captura cap ON co.idComponente = cap.fkComponente
                 WHERE co.nome = "Memória RAM"
                 ORDER BY cap.dtCaptura DESC;
-
-
-SELECT 
-                    u.nome AS Usuario,
-                    c.nome AS Central,
-                    m.marca AS Maquina,
-                    m.sistemaOperacional AS SistemaOperacional,
-                    c.nome AS Componente,
-                    CONCAT(ROUND(cap.gbLivre,2), " GB") AS GBLivre,
-                    CONCAT(ROUND(cap.gbEmUso,2), " GB") AS GBEmUso,
-                    CONCAT(cap.porcentagemDeUso, "%") AS Percentual,
-                    cap.dtCaptura AS DataCaptura
-                FROM Usuario u
-                JOIN CentralAtendimento c ON u.fkCentral = c.idCentral
-                JOIN Maquina m ON m.fkCentral = c.idCentral
-                JOIN Componente co ON m.idMaquina = co.fkMaquina
-                LEFT JOIN Captura cap ON co.idComponente = cap.fkComponente
-                WHERE co.nome = "Disco Rígido"
-                ORDER BY cap.dtCaptura DESC;
                 
+select * from vw_memoria_ram;
+
+
+CREATE VIEW vw_disco_rigido AS
+SELECT 
+    u.nome AS Usuario,
+    c.nome AS Central,
+    m.marca AS Maquina,
+    m.sistemaOperacional AS SistemaOperacional,
+    co.nome AS Componente,
+    CONCAT(ROUND(cap.gbLivre,2), ' GB') AS GBLivre,
+    CONCAT(ROUND(cap.gbEmUso,2), ' GB') AS GBEmUso,
+    CONCAT(cap.porcentagemDeUso, '%') AS Percentual,
+    cap.dtCaptura AS DataCaptura,
+    cap.hostname
+FROM Usuario u
+JOIN CentralAtendimento c ON u.fkCentral = c.idCentral
+JOIN Maquina m ON m.fkCentral = c.idCentral
+JOIN Componente co ON m.idMaquina = co.fkMaquina
+LEFT JOIN Captura cap ON co.idComponente = cap.fkComponente
+WHERE co.nome = 'Disco Rígido'
+ORDER BY cap.dtCaptura DESC;
+
+select * from vw_disco_rigido;
+
+            
