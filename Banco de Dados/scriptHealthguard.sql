@@ -1,215 +1,274 @@
-CREATE DATABASE healthguard;
-USE healthguard;
+DROP DATABASE IF EXISTS HealthGuard;
+
+CREATE DATABASE IF NOT EXISTS HealthGuard;
+
+USE HealthGuard;
+
+-- Label Empresa
+CREATE TABLE UnidadeDeAtendimento (
+
+idUnidadeDeAtendimento INT PRIMARY KEY AUTO_INCREMENT,
+
+razaoSocial VARCHAR(100) 			NOT NULL,
+
+nomeFantasia VARCHAR(100) 			DEFAULT NULL,
+
+cnpj CHAR(14) 						NOT NULL,
+
+unidadeGestora VARCHAR(100) 		NOT NULL
+);
 
 CREATE TABLE Endereco (
-	idEndereco INT PRIMARY KEY AUTO_INCREMENT,
-    logradouro VARCHAR(45),
-    numero VARCHAR(45),
-    cidade VARCHAR(45),
-    bairro VARCHAR(45),
-    uf CHAR(2)
+
+idEndereco 					INT AUTO_INCREMENT,
+
+fkUnidadeDeAtendimento 		INT,
+CONSTRAINT pkCompostaEndereco PRIMARY KEY (idEndereco, fkUnidadeDeAtendimento),
+
+cep CHAR(8) 				NOT NULL,
+
+uf CHAR(2) 					NOT NULL,
+
+cidade VARCHAR(100) 		NOT NULL,
+
+bairro VARCHAR(100) 		NOT NULL,
+
+logradouro VARCHAR(100) 	NOT NULL,
+
+numero VARCHAR(45) 			NOT NULL,
+
+complemento VARCHAR(45) 	DEFAULT NULL,
+
+CONSTRAINT fkEnderecoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
 );
 
-Insert into Endereco (logradouro, numero, cidade, bairro, uf) values
-("Avenida Paulista", 290, "São Paulo", "Bela vista", "SP");
+CREATE TABLE ContatoParaAlertas (
+idContatoParaAlertas 		INT AUTO_INCREMENT,
 
-CREATE TABLE OrgaoPublico (
-	idOrgao INT PRIMARY KEY AUTO_INCREMENT,
-    razaoSocial VARCHAR(45),
-    telefone CHAR(11),
-    email VARCHAR(45),
-    cnpj CHAR(14)
+fkUnidadeDeAtendimento 		INT,
+CONSTRAINT pkCompostaContatoParaAlertas PRIMARY KEY (idContatoParaAlertas,fkUnidadeDeAtendimento),
+
+nome VARCHAR(100) 			NOT NULL,
+
+cargo VARCHAR(45) 			NOT NULL,
+
+email VARCHAR(100) 			DEFAULT NULL,
+
+telefone CHAR(11) 			DEFAULT NULL,
+
+disponibilidadeDeHorario 	VARCHAR(45) NOT NULL,
+
+nivelEscalonamento 			VARCHAR(45) NOT NULL,
+
+CONSTRAINT fkContatoParaAlertasUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
 );
 
-INSERT INTO OrgaoPublico (razaoSocial, telefone, email, cnpj) VALUES
-("Prefeitura de São Paulo", 11941924548, "saopaulo@org.com.br", 12345678912345);
+CREATE TABLE CodigoValidacao (
+idCodigoValidacao 			INT AUTO_INCREMENT,
 
-CREATE TABLE CentralAtendimento (
-	idCentral INT AUTO_INCREMENT,
-    fkOrgao INT,
-    fkEndereco INT,
-    nome VARCHAR(45),
-    email VARCHAR(45),
-	telefone CHAR(11),
-    PRIMARY KEY (idCentral, fkOrgao),
-    FOREIGN KEY (fkOrgao)
-    REFERENCES OrgaoPublico(idOrgao),
-    FOREIGN KEY (fkEndereco)
-    REFERENCES Endereco(idEndereco)
+fkUnidadeDeAtendimento 		INT,
+CONSTRAINT pkCompostaCodigoValidacao PRIMARY KEY (idCodigoValidacao,fkUnidadeDeAtendimento),
+
+codigo 						CHAR(15),
+
+dataCriacao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+dataExpiracao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+statusCodigo 				VARCHAR(45) DEFAULT 'Pedente',
+CONSTRAINT chkStatusCodigoValidacao CHECK (statusCodigo in('Pedente','Aceito','Expirado')),
+
+CONSTRAINT fkCodigoValidacaoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
 );
 
-INSERT INTO CentralAtendimento (fkOrgao, fkEndereco, nome, email, telefone) VALUES
-(1, 1, "SAMU Esperança", "samuesperanca@gmail.com", 934891828);
+CREATE TABLE CodigoConfiguracao (
+idCodigoConfiguracao 		INT AUTO_INCREMENT,
 
-CREATE TABLE CodigoAtivacao (
-	idCodigo INT PRIMARY KEY AUTO_INCREMENT,
-    fkCentral INT,
-    codigo VARCHAR(45),
-    validade DATE,
-    qtdUsos INT,
-    FOREIGN KEY (fkCentral)
-    REFERENCES CentralAtendimento(idCentral)
+fkUnidadeDeAtendimento 		INT,
+CONSTRAINT pkCompostaCodigoValidacao PRIMARY KEY (idCodigoConfiguracao,fkUnidadeDeAtendimento),
+
+codigo 						CHAR(20),
+
+dataCriacao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+dataExpiracao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+statusCodigo 				VARCHAR(45) DEFAULT 'Pedente',
+CONSTRAINT chkStatusCodigoConfiguracao CHECK (statusCodigo in('Pedente','Aceito','Expirado')),
+
+CONSTRAINT fkCodigoConfiguracaoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
 );
 
-INSERT INTO CodigoAtivacao (fkCentral, codigo, validade, qtdUsos) VALUES 
-(1, "00j12", "2025-09-11", 10);
-
-CREATE TABLE TipoUsuario (
-	idTipo INT PRIMARY KEY AUTO_INCREMENT, 
-    tipo VARCHAR(45),
-    permissao VARCHAR(100)
-);
-
-INSERT INTO TipoUsuario (tipo, permissao) VALUES
-("Administrador", "Ler, escrever, executar e gerenciar usuários e permissões");
+-- Label Usuário 
 
 CREATE TABLE Usuario (
-	idUsuario INT AUTO_INCREMENT,
-    fkTipo INT,
-    fkCentral INT,
-    nome VARCHAR(45),
-    email VARCHAR(45),
-    senha VARCHAR(45),
-    cpf CHAR(11),
-    PRIMARY KEY (idUsuario, fkTipo),
-    FOREIGN KEY (fkTipo)
-    REFERENCES TipoUsuario(idTipo),
-    FOREIGN KEY (fkCentral)
-    REFERENCES CentralAtendimento(idCentral)
+idUsuario 			INT PRIMARY KEY AUTO_INCREMENT,
+
+nome VARCHAR(100) 	NOT NULL,
+
+email VARCHAR(100) 	NOT NULL,
+
+senha VARCHAR(256) 	NOT NULL,
+
+cpf 				CHAR(11)
 );
 
-INSERT INTO Usuario (fkTipo, fkCentral, nome, email, senha, cpf) VALUES 
-(1, 1, "Ryan Patric", "ryanpina@gmail.com", "urubu100", 55754898548);
+CREATE TABLE LogAcesso (
+idLogAcesso 				INT AUTO_INCREMENT,
 
-CREATE TABLE Maquina (
-	idMaquina INT PRIMARY KEY AUTO_INCREMENT,
-    fkCentral INT,
-    sistemaOperacional VARCHAR(45),
-    marca VARCHAR(45),
-    modelo VARCHAR(45),
-    FOREIGN KEY (fkCentral)
-    REFERENCES CentralAtendimento(idCentral)
+fkUnidadeDeAtendimento 		INT,
+
+fkUsuario 					INT,
+CONSTRAINT pkCompostaLogAcesso PRIMARY KEY (idLogAcesso,fkUnidadeDeAtendimento,fkUsuario),
+
+dataAcesso 					DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+CONSTRAINT fkLogAcessoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento),
+CONSTRAINT fkLogAcessoUsuario FOREIGN KEY (fkUsuario) REFERENCES Usuario(idUsuario)
 );
 
-Insert into Maquina (fkCentral,sistemaOperacional, marca, modelo) values
-(1, "Linux", "Dell", "Inspiron 15");
+CREATE TABLE LogAcoes (
+idLogAcoes 				INT AUTO_INCREMENT,
 
-CREATE TABLE Componente (
-	idComponente INT auto_increment,
-    fkMaquina INT,
-    nome VARCHAR(45),
-    tipo VARCHAR(45),
-    capacidade VARCHAR(45),
-    fabricante VARCHAR(45),
-    preco DECIMAL(4,2),
-    PRIMARY KEY (idComponente, fkMaquina),
-    FOREIGN KEY (fkMaquina)
-    REFERENCES Maquina(idMaquina)
+fkUnidadeDeAtendimento 	INT,
+
+fkUsuario 				INT,
+
+fkLogAcesso 			INT,
+CONSTRAINT pkCompostaLogAcoes PRIMARY KEY(idLogAcoes,fkUnidadeDeAtendimento,fkUsuario,fkLogAcesso),
+
+acao VARCHAR(100) 		NOT NULL,
+
+horarioDaAcao 			DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+CONSTRAINT fkLogAcoesUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES LogAcesso(fkUnidadeDeAtendimento),
+CONSTRAINT fkLogAcoesUsuario FOREIGN KEY (fkUsuario) REFERENCES LogAcesso(fkUsuario),
+CONSTRAINT fkLogAcoesLogAcesso FOREIGN KEY (fkLogAcesso) REFERENCES LogAcesso(idLogAcesso)
 );
 
-INSERT INTO Componente (idComponente, fkMaquina, nome, tipo, capacidade, fabricante, preco) VALUES 
-(default, 1, 'Memória RAM', 'Hardware', '16GB DDR4', 'Kingston', 29.99), 
-(default, 1, 'Disco Rígido', 'Hardware', '1TB', 'Seagate', 99.00),
-(default, 1, 'Processador', 'Hardware', 'Intel i7', 'Intel', 10.00);
+-- Label Captura
 
-CREATE TABLE Captura (
-    idCaptura INT AUTO_INCREMENT,
-	fkComponente INT,
-    gbLivre FLOAT,
-    gbEmUso FLOAT,
-    porcentagemDeUso FLOAT,
-    hostname VARCHAR(45),
-    dtCaptura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (idCaptura, fkComponente),
-    FOREIGN KEY (fkComponente)
-    REFERENCES Componente(idComponente)
+CREATE TABLE Dac (
+idDac 						INT AUTO_INCREMENT,
+
+fkUnidadeDeAtendimento 		INT,
+CONSTRAINT pkCompostaDac PRIMARY KEY (idDac,fkUnidadeDeAtendimento),
+
+nomeDeIdentificacao 		VARCHAR(100) NOT NULL,
+
+statusDac VARCHAR(45) 		DEFAULT 'Inativo',
+CONSTRAINT chkStatusDac CHECK (statusDac in('Ativo','Inativo','Excluido')),
+
+codigoValidacao CHAR(20) 	NOT NULL,
+
+CONSTRAINT fkDacUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
+);
+
+CREATE TABLE MedicoesDisponiveis (
+idMedicoesDisponiveis 	INT PRIMARY KEY AUTO_INCREMENT,
+
+nomeDaMedicao 			VARCHAR(100) NOT NULL,
+
+unidadeDeMedida 	VARCHAR(45) NOT NULL
+);
+
+CREATE TABLE MedicoesSelecionadas (
+idMedicoesSelecionadas 	INT AUTO_INCREMENT,
+
+fkUnidadeDeAtendimento 	INT,
+
+fkDac 					INT,
+
+fkMedicoesDisponiveis 	INT,
+CONSTRAINT pkCompostaMedicoesSelecionadas PRIMARY KEY (idMedicoesSelecionadas,fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponiveis),
+
+dataConfiguracao 		DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+CONSTRAINT fkMedicoesSelecionadasUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES Dac(fkUnidadeDeAtendimento),
+CONSTRAINT fkMedicoesSelecionadasDac FOREIGN KEY (fkDac) REFERENCES Dac(idDac),
+CONSTRAINT fkMedicoesSelecionadasMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesDisponiveis(idMedicoesDisponiveis)
+);
+
+CREATE TABLE MetricaAlerta (
+idMetricaAlerta 			INT AUTO_INCREMENT,
+
+fkUnidadeDeAtendimento 		INT,
+
+fkDac 						INT,
+
+fkMedicoesDisponiveis 		INT,
+
+fkMedicoesSelecionadas 		INT,
+CONSTRAINT pkCompostaMetricaAlerta PRIMARY KEY(idMetricaAlerta,fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponiveis,fkMedicoesSelecionadas),
+
+nomeNivel VARCHAR(45) 		NOT NULL,
+
+valorMinimo	 				FLOAT,
+
+valorMaximo 				FLOAT,
+
+dataCriacao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+CONSTRAINT fkMetricaAlertaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES MedicoesSelecionadas(fkUnidadeDeAtendimento),
+CONSTRAINT fkMetricaAlertaDac FOREIGN KEY (fkDac) REFERENCES MedicoesSelecionadas(fkDac),
+CONSTRAINT fkMetricaAlertaMedicoesDisponiveis  FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesSelecionadas(fkMedicoesDisponiveis),
+CONSTRAINT fkMetricaAlertaMedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas)
 );
 
 CREATE TABLE Alerta (
-	idAlerta INT PRIMARY KEY AUTO_INCREMENT,
-    fkCaptura INT,
-    nivel VARCHAR(45),
-    mensagem VARCHAR(80),
-    status VARCHAR(45),
-    dtEmissao TIMESTAMP,
-    FOREIGN KEY (fkCaptura)
-    REFERENCES Captura(idCaptura)
+idAlerta INT AUTO_INCREMENT,
+
+fkUnidadeDeAtendimento 		INT,
+
+fkDac 						INT,
+
+fkMedicoesDisponiveis 		INT,
+
+fkMedicoesSelecionadas 		INT,
+
+fkMetricaAlerta 			INT,
+CONSTRAINT pkCompostaAlerta PRIMARY KEY (idAlerta,fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponiveis,fkMedicoesSelecionadas,fkMetricaAlerta),
+
+dataInicio 					DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+dataTermino 				DATETIME DEFAULT NULL,
+
+CONSTRAINT fkAlertaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES MetricaAlerta(fkUnidadeDeAtendimento),
+CONSTRAINT fkAlertaDac FOREIGN KEY (fkDac) REFERENCES MetricaAlerta(fkDac),
+CONSTRAINT fkMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MetricaAlerta(fkMedicoesDisponiveis),
+CONSTRAINT fkAlertaMedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES MetricaAlerta(fkMedicoesSelecionadas),
+CONSTRAINT fkAlertaMetricaAlerta FOREIGN KEY (fkMetricaAlerta) REFERENCES MetricaAlerta(idMetricaAlerta)
 );
 
-CREATE TABLE Parametro (
-	idParametro INT AUTO_INCREMENT,
-    fkComponente INT, 
-    nivel VARCHAR(45),
-    minimo VARCHAR(45),
-    maximo VARCHAR(45),
-    PRIMARY KEY (idParametro, fkComponente),
-    FOREIGN KEY (fkComponente)
-    REFERENCES Componente(idComponente)
+CREATE TABLE Leitura (
+idLeitura INT AUTO_INCREMENT,
+fkMedicoesDisponiveis INT,
+fkMedicoesSelecionadas INT,
+fkDac INT,
+fkUnidadeDeAtendimento INT,
+CONSTRAINT pkCompostaLeitura PRIMARY KEY (idLeitura,fkMedicoesDisponiveis,fkMedicoesSelecionadas,fkDac,fkUnidadeDeAtendimento),
+medidaCapturada VARCHAR(45) NOT NULL,
+dataCaptura DATETIME DEFAULT CURRENT_TIMESTAMP,
+fkAlerta INT,
+fkMetricaAlerta INT,
+fkMedicoesDisponiveisAlerta INT,
+fkMedicoesSelecionadasAlerta INT,
+fkDacAlerta INT,
+fkUnidadeDeAtendimentoAlerta INT,
+
+-- FOREIGN KEYS das PKS
+CONSTRAINT fkLeituraMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesSelecionadas(fkMedicoesDisponiveis),
+CONSTRAINT fkLeituraMedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas),
+CONSTRAINT fkLeituraDac FOREIGN KEY (fkDac) REFERENCES MedicoesSelecionadas(fkDac),
+CONSTRAINT fkLeituraUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES MedicoesSelecionadas(fkUnidadeDeAtendimento),
+-- FOREIGN KEYS da tabela alerta
+CONSTRAINT fkLeituraAlerta FOREIGN KEY (fkAlerta) REFERENCES Alerta(idAlerta),
+CONSTRAINT fkLeituraMetricaAlerta FOREIGN KEY (fkMetricaAlerta) REFERENCES Alerta(fkMetricaAlerta),
+CONSTRAINT fkLeituraMedicoesDisponiveisAlerta FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES Alerta(fkMedicoesDisponiveis),
+CONSTRAINT fkLeituraMedicoesSelecionadasAlerta FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES Alerta(fkMedicoesSelecionadas),
+CONSTRAINT fkLeituraDacAlerta FOREIGN KEY (fkDac) REFERENCES Alerta(fkDac),
+CONSTRAINT fkLeituraUnidadeDeAtendimentoAlerta FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES Alerta(fkUnidadeDeAtendimento)
 );
 
 
-CREATE VIEW vw_cpu AS
-SELECT 
-				u.nome AS Usuario,
-                    c.nome AS Central,
-                    m.marca AS Maquina,
-                    m.sistemaOperacional AS SistemaOperacional,
-                    co.nome AS Componente,
-                    CONCAT(cap.porcentagemDeUso, "%") AS Percentual,
-                    cap.dtCaptura AS DataCaptura,
-                      cap.hostname
-                FROM Usuario u
-                JOIN CentralAtendimento c ON u.fkCentral = c.idCentral
-                JOIN Maquina m ON m.fkCentral = c.idCentral
-                JOIN Componente co ON m.idMaquina = co.fkMaquina
-                LEFT JOIN Captura cap ON co.idComponente = cap.fkComponente
-                WHERE co.nome = "Processador"
-                ORDER BY cap.dtCaptura DESC;
-                
-select * from vw_cpu;
-                
-CREATE VIEW vw_memoria_ram AS
-	SELECT 
-				u.nome AS Usuario,
-                    c.nome AS Central,
-                    m.marca AS Maquina,
-                    m.sistemaOperacional AS SistemaOperacional,
-                    co.nome AS Componente,
-                    CONCAT(cap.gbLivre, " GB") AS MemoriaLivre,
-                    CONCAT(cap.gbEmUso, " GB") AS MemoriaEmUso,
-                    cap.dtCaptura AS DataCaptura,
-                      cap.hostname
-                FROM Usuario u
-                JOIN CentralAtendimento c ON u.fkCentral = c.idCentral
-                JOIN Maquina m ON m.fkCentral = c.idCentral
-                JOIN Componente co ON m.idMaquina = co.fkMaquina
-                LEFT JOIN Captura cap ON co.idComponente = cap.fkComponente
-                WHERE co.nome = "Memória RAM"
-                ORDER BY cap.dtCaptura DESC;
-                
-select * from vw_memoria_ram;
 
-
-CREATE VIEW vw_disco_rigido AS
-SELECT 
-    u.nome AS Usuario,
-    c.nome AS Central,
-    m.marca AS Maquina,
-    m.sistemaOperacional AS SistemaOperacional,
-    co.nome AS Componente,
-    CONCAT(ROUND(cap.gbLivre,2), ' GB') AS GBLivre,
-    CONCAT(ROUND(cap.gbEmUso,2), ' GB') AS GBEmUso,
-    CONCAT(cap.porcentagemDeUso, '%') AS Percentual,
-    cap.dtCaptura AS DataCaptura,
-    cap.hostname
-FROM Usuario u
-JOIN CentralAtendimento c ON u.fkCentral = c.idCentral
-JOIN Maquina m ON m.fkCentral = c.idCentral
-JOIN Componente co ON m.idMaquina = co.fkMaquina
-LEFT JOIN Captura cap ON co.idComponente = cap.fkComponente
-WHERE co.nome = 'Disco Rígido'
-ORDER BY cap.dtCaptura DESC;
-
-select * from vw_disco_rigido;
-
-            
