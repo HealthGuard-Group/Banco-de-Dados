@@ -1,0 +1,31 @@
+use healthGuard;
+
+INSERT INTO MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALUES
+('Porcentagem de uso da CPU','%'),
+('Frequência de uso da CPU','GHz'),
+('Uso da Memória RAM','%'),
+('Memória RAM Total','GB'),
+('Uso do disco','GB'),
+('Espaço restante do disco','GB'),
+('Espaço do Disco','GB');
+
+-- Inserções na tabela UnidadeDeAtendimento
+INSERT INTO UnidadeDeAtendimento (razaoSocial, nomeFantasia, cnpj, unidadeGestora)
+VALUES ('Hospital Vida Ltda', 'Hospital Vida', '12345678000195', 'Secretaria da Saúde');
+
+INSERT INTO UnidadeDeAtendimento (razaoSocial, nomeFantasia, cnpj, unidadeGestora)
+VALUES ('Clínica Bem Estar SA', 'Clínica Bem Estar', '98765432000177', 'Secretaria da Saúde');
+
+-- Inserções na tabela CodigoConfiguracao
+INSERT INTO CodigoConfiguracao (fkUnidadeDeAtendimento, codigo, dataExpiracao, statusCodigo)
+VALUES (1, 'ABC123DEF456GHI78901', '2025-12-31 23:59:59', 'Pedente');
+
+INSERT INTO CodigoConfiguracao (fkUnidadeDeAtendimento, codigo, dataExpiracao, statusCodigo)
+VALUES (2, 'XYZ987LMN654OPQ32102', '2025-10-31 23:59:59', 'Aceito');
+
+INSERT INTO Dac (fkUnidadeDeAtendimento,codigoValidacao) VALUES
+(1,"ABC123DEF456GHI78901");
+UPDATE healthguard.CodigoConfiguracao SET statusCodigo = 'Pedente' WHERE idCodigoConfiguracao = 1;
+select * from CodigoConfiguracao;
+select * from dac;
+SELECT idDac,fkUnidadeDeAtendimento FROM healthguard.Dac WHERE statusDac != 'Excluido' AND codigoValidacao = 'ABC123DEF456GHI78901';
