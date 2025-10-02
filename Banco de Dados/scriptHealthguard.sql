@@ -270,9 +270,9 @@ CONSTRAINT fkLeituraDacAlerta FOREIGN KEY (fkDacAlerta) REFERENCES Alerta(fkDac)
 CONSTRAINT fkLeituraUnidadeDeAtendimentoAlerta FOREIGN KEY (fkUnidadeDeAtendimentoAlerta) REFERENCES Alerta(fkUnidadeDeAtendimento)
 );
 
-DROP USER IF EXISTS logpython;
-CREATE USER 'logpython'@'%' IDENTIFIED BY 'L@gpyThon!.04';
-GRANT INSERT,SELECT,UPDATE,DELETE ON healthguard.* TO 'logpython'@'%';
+DROP USER IF EXISTS logan;
+CREATE USER 'logan'@'%' IDENTIFIED BY 'senha-segura123';
+GRANT INSERT,SELECT,UPDATE,DELETE ON HealthGuard.* TO 'logan'@'%';
 FLUSH PRIVILEGES;
 
 
