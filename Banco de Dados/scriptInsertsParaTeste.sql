@@ -23,9 +23,21 @@ VALUES (1, 'ABC123DEF456GHI78901', '2025-12-31 23:59:59', 'Pedente');
 INSERT INTO CodigoConfiguracao (fkUnidadeDeAtendimento, codigo, dataExpiracao, statusCodigo)
 VALUES (2, 'XYZ987LMN654OPQ32102', '2025-10-31 23:59:59', 'Aceito');
 
-INSERT INTO Dac (fkUnidadeDeAtendimento,codigoValidacao) VALUES
-(1,"ABC123DEF456GHI78901");
+INSERT INTO Dac (fkUnidadeDeAtendimento,codigoValidacao,nomeDeIdentificacao) VALUES
+(1,"ABC123DEF456GHI78901","Arthur Machine");
 UPDATE healthguard.CodigoConfiguracao SET statusCodigo = 'Pedente' WHERE idCodigoConfiguracao = 1;
 select * from CodigoConfiguracao;
-select * from dac;
+select * from dac;INSERT INTO MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponiveis) VALUES
+(1,1,1),
+(1,1,2),
+(1,1,3),
+(1,1,4),
+(1,1,5),
+(1,1,6),
+(1,1,7);
+
+select * from leitura;
 SELECT idDac,fkUnidadeDeAtendimento FROM healthguard.Dac WHERE statusDac != 'Excluido' AND codigoValidacao = 'ABC123DEF456GHI78901';
+
+
+

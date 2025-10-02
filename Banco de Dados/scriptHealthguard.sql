@@ -159,7 +159,7 @@ nomeDeIdentificacao 		VARCHAR(100) NOT NULL,
 statusDac VARCHAR(45) 		DEFAULT 'Inativo',
 CONSTRAINT chkStatusDac CHECK (statusDac in('Ativo','Inativo','Excluido')),
 
-codigoValidacao CHAR(20) 	NOT NULL,
+codigoValidacao VARCHAR(256) 	NOT NULL,
 
 CONSTRAINT fkDacUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
 );
@@ -249,12 +249,12 @@ fkUnidadeDeAtendimento INT,
 CONSTRAINT pkCompostaLeitura PRIMARY KEY (idLeitura,fkMedicoesDisponiveis,fkMedicoesSelecionadas,fkDac,fkUnidadeDeAtendimento),
 medidaCapturada VARCHAR(45) NOT NULL,
 dataCaptura DATETIME DEFAULT CURRENT_TIMESTAMP,
-fkAlerta INT,
-fkMetricaAlerta INT,
-fkMedicoesDisponiveisAlerta INT,
-fkMedicoesSelecionadasAlerta INT,
-fkDacAlerta INT,
-fkUnidadeDeAtendimentoAlerta INT,
+fkAlerta INT DEFAULT NULL,
+fkMetricaAlerta INT DEFAULT NULL,
+fkMedicoesDisponiveisAlerta INT DEFAULT NULL,
+fkMedicoesSelecionadasAlerta INT DEFAULT NULL,
+fkDacAlerta INT DEFAULT NULL,
+fkUnidadeDeAtendimentoAlerta INT DEFAULT NULL,
 
 -- FOREIGN KEYS das PKS
 CONSTRAINT fkLeituraMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesSelecionadas(fkMedicoesDisponiveis),
@@ -264,10 +264,10 @@ CONSTRAINT fkLeituraUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) RE
 -- FOREIGN KEYS da tabela alerta
 CONSTRAINT fkLeituraAlerta FOREIGN KEY (fkAlerta) REFERENCES Alerta(idAlerta),
 CONSTRAINT fkLeituraMetricaAlerta FOREIGN KEY (fkMetricaAlerta) REFERENCES Alerta(fkMetricaAlerta),
-CONSTRAINT fkLeituraMedicoesDisponiveisAlerta FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES Alerta(fkMedicoesDisponiveis),
-CONSTRAINT fkLeituraMedicoesSelecionadasAlerta FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES Alerta(fkMedicoesSelecionadas),
-CONSTRAINT fkLeituraDacAlerta FOREIGN KEY (fkDac) REFERENCES Alerta(fkDac),
-CONSTRAINT fkLeituraUnidadeDeAtendimentoAlerta FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES Alerta(fkUnidadeDeAtendimento)
+CONSTRAINT fkLeituraMedicoesDisponiveisAlerta FOREIGN KEY (fkMedicoesDisponiveisAlerta) REFERENCES Alerta(fkMedicoesDisponiveis),
+CONSTRAINT fkLeituraMedicoesSelecionadasAlerta FOREIGN KEY (fkMedicoesSelecionadasAlerta) REFERENCES Alerta(fkMedicoesSelecionadas),
+CONSTRAINT fkLeituraDacAlerta FOREIGN KEY (fkDacAlerta) REFERENCES Alerta(fkDac),
+CONSTRAINT fkLeituraUnidadeDeAtendimentoAlerta FOREIGN KEY (fkUnidadeDeAtendimentoAlerta) REFERENCES Alerta(fkUnidadeDeAtendimento)
 );
 
 DROP USER IF EXISTS logpython;
