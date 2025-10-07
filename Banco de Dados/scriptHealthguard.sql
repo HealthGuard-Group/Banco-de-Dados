@@ -63,24 +63,6 @@ nivelEscalonamento 			VARCHAR(45) NOT NULL,
 CONSTRAINT fkContatoParaAlertasUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
 );
 
-CREATE TABLE CodigoValidacao (
-idCodigoValidacao 			INT AUTO_INCREMENT,
-
-fkUnidadeDeAtendimento 		INT,
-CONSTRAINT pkCompostaCodigoValidacao PRIMARY KEY (idCodigoValidacao,fkUnidadeDeAtendimento),
-
-codigo 						CHAR(15),
-
-dataCriacao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-dataExpiracao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-statusCodigo 				VARCHAR(45) DEFAULT 'Pedente',
-CONSTRAINT chkStatusCodigoValidacao CHECK (statusCodigo in('Pedente','Aceito','Expirado')),
-
-CONSTRAINT fkCodigoValidacaoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
-);
-
 CREATE TABLE CodigoConfiguracao (
 idCodigoConfiguracao 		INT AUTO_INCREMENT,
 
@@ -101,8 +83,41 @@ CONSTRAINT fkCodigoConfiguracaoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAten
 
 -- Label Usuário 
 
+CREATE TABLE Permissoes (
+idPermissoes 			INT PRIMARY KEY AUTO_INCREMENT,
+
+nome VARCHAR(100) 		NOT NULL,
+
+descricao VARCHAR(500) 
+);
+
+CREATE TABLE CodigoValidacao (
+idCodigoValidacao 			INT AUTO_INCREMENT,
+
+fkUnidadeDeAtendimento 		INT,
+
+fkPermissoes				INT,
+
+CONSTRAINT pkCompostaCodigoValidacao PRIMARY KEY (idCodigoValidacao,fkUnidadeDeAtendimento,fkPermissoes),
+
+codigo 						CHAR(15),
+
+dataCriacao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+dataExpiracao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+statusCodigo 				VARCHAR(45) DEFAULT 'Pedente',
+CONSTRAINT chkStatusCodigoValidacao CHECK (statusCodigo in('Pedente','Aceito','Expirado')),
+
+CONSTRAINT fkCodigoValidacaoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento),
+CONSTRAINT fkCodigoValidacaoPermissoes FOREIGN KEY (fkPermissoes) REFERENCES Permissoes(idPermissoes)
+);
+
 CREATE TABLE Usuario (
-idUsuario 			INT PRIMARY KEY AUTO_INCREMENT,
+idUsuario 			INT AUTO_INCREMENT,
+
+fkPermissoes 		INT,
+CONSTRAINT pkCompostaUsuario PRIMARY KEY (idUsuario,fkPermissoes),
 
 nome VARCHAR(100) 	NOT NULL,
 
@@ -110,7 +125,9 @@ email VARCHAR(100) 	NOT NULL,
 
 senha VARCHAR(256) 	NOT NULL,
 
-cpf 				CHAR(11)
+cpf 				CHAR(11),
+
+CONSTRAINT fkUsuarioPermissoes FOREIGN KEY (fkPermissoes) REFERENCES Permissoes(idPermissoes)
 );
 
 CREATE TABLE LogAcesso (
