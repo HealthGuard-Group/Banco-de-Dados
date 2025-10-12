@@ -211,12 +211,12 @@ idMetricaAlerta 			INT AUTO_INCREMENT,
 
 fkUnidadeDeAtendimento 		INT,
 
+fkUnidadeDeAtendimentoDac 	INT,
+
 fkDac 						INT,
 
 fkMedicoesDisponiveis 		INT,
-
-fkMedicoesSelecionadas 		INT,
-CONSTRAINT pkCompostaMetricaAlerta PRIMARY KEY(idMetricaAlerta,fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponiveis,fkMedicoesSelecionadas),
+CONSTRAINT pkCompostaMetricaAlerta PRIMARY KEY(idMetricaAlerta,fkUnidadeDeAtendimento,fkMedicoesDisponiveis),
 
 nomeNivel VARCHAR(45) 		NOT NULL,
 
@@ -226,12 +226,34 @@ valorMaximo 				FLOAT,
 
 dataCriacao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-CONSTRAINT fkMetricaAlertaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES MedicoesSelecionadas(fkUnidadeDeAtendimento),
-CONSTRAINT fkMetricaAlertaDac FOREIGN KEY (fkDac) REFERENCES MedicoesSelecionadas(fkDac),
-CONSTRAINT fkMetricaAlertaMedicoesDisponiveis  FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesSelecionadas(fkMedicoesDisponiveis),
-CONSTRAINT fkMetricaAlertaMedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas)
+CONSTRAINT fkMetricaAlertaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento),
+CONSTRAINT fkMetricaAlertaUnidadeDeAtendimentoDac FOREIGN KEY (fkUnidadeDeAtendimentoDac) REFERENCES Dac(fkUnidadeDeAtendimento),
+CONSTRAINT fkMetricaAlertaDac FOREIGN KEY (fkDac) REFERENCES Dac(idDac),
+CONSTRAINT fkMetricaAlerta FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesDisponiveis(idMedicoesDisponiveis)
 );
 
+CREATE TABLE Leitura (
+idLeitura 					INT AUTO_INCREMENT,
+fkMedicoesDisponiveis 		INT,
+fkMedicoesSelecionadas 		INT,
+fkDac 						INT,
+fkUnidadeDeAtendimento 		INT,
+CONSTRAINT pkCompostaLeitura PRIMARY KEY (idLeitura,fkMedicoesDisponiveis,fkMedicoesSelecionadas,fkDac,fkUnidadeDeAtendimento),
+medidaCapturada 			VARCHAR(45) NOT NULL,
+dataCaptura 				DATETIME DEFAULT CURRENT_TIMESTAMP,
+fkAlerta 					INT DEFAULT NULL,
+fkMetricaAlerta 			INT DEFAULT NULL,
+fkMedicoesDisponiveisAlerta INT DEFAULT NULL,
+fkMedicoesSelecionadasAlerta INT DEFAULT NULL,
+fkDacAlerta 				INT DEFAULT NULL,
+fkUnidadeDeAtendimentoAlerta INT DEFAULT NULL,
+
+-- FOREIGN KEYS das PKS
+CONSTRAINT fkLeituraMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesSelecionadas(fkMedicoesDisponiveis),
+CONSTRAINT fkLeituraMedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas),
+CONSTRAINT fkLeituraDac FOREIGN KEY (fkDac) REFERENCES MedicoesSelecionadas(fkDac),
+CONSTRAINT fkLeituraUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES MedicoesSelecionadas(fkUnidadeDeAtendimento)
+);
 CREATE TABLE Alerta (
 idAlerta INT AUTO_INCREMENT,
 
@@ -243,48 +265,18 @@ fkMedicoesDisponiveis 		INT,
 
 fkMedicoesSelecionadas 		INT,
 
-fkMetricaAlerta 			INT,
-CONSTRAINT pkCompostaAlerta PRIMARY KEY (idAlerta,fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponiveis,fkMedicoesSelecionadas,fkMetricaAlerta),
+fkLeitura 					INT,
+CONSTRAINT pkCompostaAlerta PRIMARY KEY (idAlerta,fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponiveis,fkMedicoesSelecionadas,fkLeitura),
 
 dataInicio 					DATETIME DEFAULT CURRENT_TIMESTAMP,
 
 dataTermino 				DATETIME DEFAULT NULL,
 
-CONSTRAINT fkAlertaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES MetricaAlerta(fkUnidadeDeAtendimento),
-CONSTRAINT fkAlertaDac FOREIGN KEY (fkDac) REFERENCES MetricaAlerta(fkDac),
-CONSTRAINT fkMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MetricaAlerta(fkMedicoesDisponiveis),
-CONSTRAINT fkAlertaMedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES MetricaAlerta(fkMedicoesSelecionadas),
-CONSTRAINT fkAlertaMetricaAlerta FOREIGN KEY (fkMetricaAlerta) REFERENCES MetricaAlerta(idMetricaAlerta)
-);
-
-CREATE TABLE Leitura (
-idLeitura INT AUTO_INCREMENT,
-fkMedicoesDisponiveis INT,
-fkMedicoesSelecionadas INT,
-fkDac INT,
-fkUnidadeDeAtendimento INT,
-CONSTRAINT pkCompostaLeitura PRIMARY KEY (idLeitura,fkMedicoesDisponiveis,fkMedicoesSelecionadas,fkDac,fkUnidadeDeAtendimento),
-medidaCapturada VARCHAR(45) NOT NULL,
-dataCaptura DATETIME DEFAULT CURRENT_TIMESTAMP,
-fkAlerta INT DEFAULT NULL,
-fkMetricaAlerta INT DEFAULT NULL,
-fkMedicoesDisponiveisAlerta INT DEFAULT NULL,
-fkMedicoesSelecionadasAlerta INT DEFAULT NULL,
-fkDacAlerta INT DEFAULT NULL,
-fkUnidadeDeAtendimentoAlerta INT DEFAULT NULL,
-
--- FOREIGN KEYS das PKS
-CONSTRAINT fkLeituraMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesSelecionadas(fkMedicoesDisponiveis),
-CONSTRAINT fkLeituraMedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas),
-CONSTRAINT fkLeituraDac FOREIGN KEY (fkDac) REFERENCES MedicoesSelecionadas(fkDac),
-CONSTRAINT fkLeituraUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES MedicoesSelecionadas(fkUnidadeDeAtendimento),
--- FOREIGN KEYS da tabela alerta
-CONSTRAINT fkLeituraAlerta FOREIGN KEY (fkAlerta) REFERENCES Alerta(idAlerta),
-CONSTRAINT fkLeituraMetricaAlerta FOREIGN KEY (fkMetricaAlerta) REFERENCES Alerta(fkMetricaAlerta),
-CONSTRAINT fkLeituraMedicoesDisponiveisAlerta FOREIGN KEY (fkMedicoesDisponiveisAlerta) REFERENCES Alerta(fkMedicoesDisponiveis),
-CONSTRAINT fkLeituraMedicoesSelecionadasAlerta FOREIGN KEY (fkMedicoesSelecionadasAlerta) REFERENCES Alerta(fkMedicoesSelecionadas),
-CONSTRAINT fkLeituraDacAlerta FOREIGN KEY (fkDacAlerta) REFERENCES Alerta(fkDac),
-CONSTRAINT fkLeituraUnidadeDeAtendimentoAlerta FOREIGN KEY (fkUnidadeDeAtendimentoAlerta) REFERENCES Alerta(fkUnidadeDeAtendimento)
+CONSTRAINT fkAlertaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES Leitura(fkUnidadeDeAtendimento),
+CONSTRAINT fkAlertaDac FOREIGN KEY (fkDac) REFERENCES Leitura(fkDac),
+CONSTRAINT fkMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES Leitura(fkMedicoesDisponiveis),
+CONSTRAINT fkAlertaMedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES Leitura(fkMedicoesSelecionadas),
+CONSTRAINT fkAlertaLeitura FOREIGN KEY (fkLeitura) REFERENCES Leitura(idLeitura)
 );
 
 DROP USER IF EXISTS logan;
