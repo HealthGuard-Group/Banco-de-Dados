@@ -1,11 +1,11 @@
 
 -- Adicionando as permissões
-INSERT INTO healthguard.permissoes(nome,descricao) VALUES
+INSERT INTO HealthGuard.Permissoes(nome,descricao) VALUES
 ('Gestor TI',"Todas as funções do Analista TI e incluso visualizar logs de ações e adicionar funcionários"),
 ('Analista TI','Pode visualizar a dashboard e adicionar uma nova máquina');
 
 -- Adicionando os monitoramentos
-INSERT INTO healthguard.MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALUES
+INSERT INTO HealthGuard.MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALUES
 ('Porcentagem de uso da CPU','%'),
 ('Frequência de uso da CPU','GHz'),
 ('Uso da Memória RAM','%'),
@@ -15,11 +15,11 @@ INSERT INTO healthguard.MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALU
 ('Espaço do Disco','GB');
 
 -- Inserções na tabela UnidadeDeAtendimento
-INSERT INTO healthguard.UnidadeDeAtendimento (razaoSocial, nomeFantasia, cnpj, unidadeGestora) VALUES 
+INSERT INTO HealthGuard.UnidadeDeAtendimento (razaoSocial, nomeFantasia, cnpj, unidadeGestora) VALUES 
 ('HealthGuard LTDA', 'HealthGuard', '12345678000195', 'Secretaria da Saúde');
 
 -- Inserções na tabela CodigoConfiguracao
-INSERT INTO healthguard.CodigoConfiguracaoMaquina (fkUnidadeDeAtendimento, codigo, dataExpiracao,statusCodigoConfiguracaoMaquina) VALUES
+INSERT INTO HealthGuard.CodigoConfiguracaoMaquina (fkUnidadeDeAtendimento, codigo, dataExpiracao,statusCodigoConfiguracaoMaquina) VALUES
 -- Códigos para ativação 
 (1, 'ABC123DEF456GHI78901', '2026-01-01 23:59:59','Pendente'),
 (1, 'AYGDSIASKDPNKODASJ28', '2026-01-01 23:59:59','Pendente'),
@@ -29,11 +29,11 @@ INSERT INTO healthguard.CodigoConfiguracaoMaquina (fkUnidadeDeAtendimento, codig
 (1, 'hsjboaisofiiasoidasi', '2026-01-01 23:59:59','Aceito');
 
 -- Inserido uma máquina
-INSERT INTO healthguard.Dac (fkUnidadeDeAtendimento,codigoValidacao,nomeIdentificacao) VALUES
+INSERT INTO HealthGuard.Dac (fkUnidadeDeAtendimento,codigoValidacao,nomeIdentificacao) VALUES
 (1,"ABC123DEF456GHI78901","Máquina A-01");
 
 -- Inserção para a configuração de todos os monitoramentos
-INSERT INTO healthguard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponiveis) VALUES
+INSERT INTO HealthGuard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponiveis) VALUES
 (1,1,1),
 (1,1,2),
 (1,1,3),
@@ -42,7 +42,7 @@ INSERT INTO healthguard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMed
 (1,1,6),
 (1,1,7);
 
-INSERT INTO healthguard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataExpiracao, statusCodigoValidacaoUsuario) VALUES
+INSERT INTO HealthGuard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataExpiracao, statusCodigoValidacaoUsuario) VALUES
 -- Convites para utilização
 (1, 1, 'A1B2C3D4E5F6G7H','2026-01-01 23:59:00', 'Pendente'),
 (1, 2, 'UAISODSAIDSAJJ7','2026-01-01 23:59:00', 'Pendente'),
@@ -55,7 +55,7 @@ INSERT INTO healthguard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermiss
 (1, 2, 'PJOKOSDAUSDSIAH','2026-01-01 23:59:00', 'Aceito');
 
 -- Inserção de máquinas DAC
-INSERT INTO healthguard.Dac (fkUnidadeDeAtendimento, nomeIdentificacao, statusDac, codigoValidacao) VALUES
+INSERT INTO HealthGuard.Dac (fkUnidadeDeAtendimento, nomeIdentificacao, statusDac, codigoValidacao) VALUES
 (1, 'Maquina A-02', 'Ativo', 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6'),
 (1, 'Maquina A-03', 'Ativo', 'q9r8s7t6u5v4w3x2y1z0a1b2c3d4e5f6'),
 (1, 'Maquina A-04', 'Ativo', 'g7h8i9j0k1l2m3n4o5p6q9r8s7t6u5v4'),
