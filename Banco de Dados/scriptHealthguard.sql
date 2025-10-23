@@ -4,280 +4,355 @@ CREATE DATABASE IF NOT EXISTS HealthGuard;
 
 USE HealthGuard;
 
--- Label Empresa
+-- Label entidades relacionadas a Central
 CREATE TABLE UnidadeDeAtendimento (
 
 idUnidadeDeAtendimento INT PRIMARY KEY AUTO_INCREMENT,
 
-razaoSocial VARCHAR(100) 			NOT NULL,
+razaoSocial VARCHAR(100) NOT NULL,
 
-nomeFantasia VARCHAR(100) 			DEFAULT NULL,
+nomeFantasia VARCHAR(100) NOT NULL,
 
-cnpj CHAR(14) 						NOT NULL,
+cnpj CHAR(14) NOT NULL,
 
-unidadeGestora VARCHAR(100) 		NOT NULL
+unidadeGestora VARCHAR(100) NOT NULL,
+CONSTRAINT chkUnidadeGestora CHECK (unidadeGestora in("Federal","Estadual","Municipal"))
+);
+
+CREATE TABLE TipoDeContato (
+
+idTipoDeContato INT PRIMARY KEY AUTO_INCREMENT,
+
+formaDeContato VARCHAR(100)
+);
+
+CREATE TABLE DiasDisponibilidade (
+
+idDiasDisponibibilidade INT PRIMARY KEY AUTO_INCREMENT,
+
+nome VARCHAR(100)
 );
 
 CREATE TABLE Endereco (
 
-idEndereco 					INT AUTO_INCREMENT,
+idEndereco INT AUTO_INCREMENT,
 
-fkUnidadeDeAtendimento 		INT,
-CONSTRAINT pkCompostaEndereco PRIMARY KEY (idEndereco, fkUnidadeDeAtendimento),
+fkUnidadeAtendimento INT,
 
-cep CHAR(8) 				NOT NULL,
+CONSTRAINT pkCompostaEndereco PRIMARY KEY (idEndereco,fkUnidadeAtendimento),
 
-uf CHAR(2) 					NOT NULL,
+cep CHAR(8) NOT NULL,
 
-cidade VARCHAR(100) 		NOT NULL,
+uf CHAR(2) NOT NULL,
 
-bairro VARCHAR(100) 		NOT NULL,
+cidade VARCHAR(100) NOT NULL,
 
-logradouro VARCHAR(100) 	NOT NULL,
+bairro VARCHAR(100) NOT NULL,
 
-numero VARCHAR(45) 			NOT NULL,
+logradouro VARCHAR(100) NOT NULL,
 
-complemento VARCHAR(45) 	DEFAULT NULL,
+numero VARCHAR(100) NOT NULL,
 
-CONSTRAINT fkEnderecoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
+complemento VARCHAR(100) DEFAULT NULL,
+
+CONSTRAINT fkEnderecoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
 );
 
-CREATE TABLE ContatoParaAlertas (
-idContatoParaAlertas 		INT AUTO_INCREMENT,
+CREATE TABLE ContatosParaAlerta (
+idContatosParaAlerta INT AUTO_INCREMENT,
 
-fkUnidadeDeAtendimento 		INT,
-CONSTRAINT pkCompostaContatoParaAlertas PRIMARY KEY (idContatoParaAlertas,fkUnidadeDeAtendimento),
+fkUnidadeDeAtendimento INT,
 
-nome VARCHAR(100) 			NOT NULL,
+CONSTRAINT pkCompostaContatosParaAlerta PRIMARY KEY (idContatosParaAlerta,fkUnidadeDeAtendimento),
 
-cargo VARCHAR(45) 			NOT NULL,
+nome VARCHAR(100) NOT NULL,
 
-email VARCHAR(100) 			DEFAULT NULL,
+cargo VARCHAR(100) NOT NULL,
 
-telefone CHAR(11) 			DEFAULT NULL,
+email VARCHAR(100),
 
-disponibilidadeDeHorario 	VARCHAR(45) NOT NULL,
+nivelEscalonamento VARCHAR(100) NOT NULL,
 
-nivelEscalonamento 			VARCHAR(45) NOT NULL,
-
-CONSTRAINT fkContatoParaAlertasUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
+CONSTRAINT fkContatosParaAlertaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
 );
 
-CREATE TABLE CodigoConfiguracao (
-idCodigoConfiguracao 		INT AUTO_INCREMENT,
+CREATE TABLE MeioDeContato (
 
-fkUnidadeDeAtendimento 		INT,
-CONSTRAINT pkCompostaCodigoValidacao PRIMARY KEY (idCodigoConfiguracao,fkUnidadeDeAtendimento),
+idMeioDeContato INT AUTO_INCREMENT,
 
-codigo 						CHAR(20),
+fkContatoParaAlertas INT,
 
-dataCriacao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
+fkUnidadeDeAtendimento INT,
 
-dataExpiracao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
+fkTipodeContato INT,
 
-statusCodigo 				VARCHAR(45) DEFAULT 'Pendente',
-CONSTRAINT chkStatusCodigoConfiguracao CHECK (statusCodigo in('Pendente','Aceito','Expirado')),
+CONSTRAINT pkCompostaMeioDeContato PRIMARY KEY (idMeioDeContato,fkContatoParaAlertas,fkUnidadeDeAtendimento,fkTipodeContato),
 
-CONSTRAINT fkCodigoConfiguracaoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
+contato VARCHAR(100),
+
+CONSTRAINT fkMeioDeContatoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES ContatosParaAlerta(fkUnidadeDeAtendimento),
+CONSTRAINT fkMeioDeContatoContatoParaAlertas FOREIGN KEY (fkContatoParaAlertas) REFERENCES ContatosParaAlerta(idContatosParaAlerta),
+CONSTRAINT fkMeioDeContatoTipodeContato FOREIGN KEY (fkTipodeContato) REFERENCES TipoDeContato(idTipoDeContato)
 );
 
--- Label Usuário 
+CREATE TABLE DiasDisponiveis (
+
+idDiasDisponiveis INT AUTO_INCREMENT,
+
+fkContatoParaAlertas INT,
+
+fkUnidadeDeAtendimento INT,
+
+fkDiasDisponibibilidade INT,
+
+CONSTRAINT pkCompostaDiasDisponiveis PRIMARY KEY (idDiasDisponiveis,fkContatoParaAlertas,fkUnidadeDeAtendimento,fkDiasDisponibibilidade),
+
+horarioEntrada TIME,
+
+horarioSaida TIME,
+
+CONSTRAINT fkDiasDisponiveisUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES ContatosParaAlerta(fkUnidadeDeAtendimento),
+CONSTRAINT fkDiasDisponiveisContatoParaAlertas FOREIGN KEY (fkContatoParaAlertas) REFERENCES ContatosParaAlerta(idContatosParaAlerta),
+CONSTRAINT fkDiasDisponiveisDiasDisponibibilidade FOREIGN KEY (fkDiasDisponibibilidade) REFERENCES DiasDisponibilidade(idDiasDisponibibilidade)
+);
+
+-- Label entidades relacionadas ao usuário
 
 CREATE TABLE Permissoes (
-idPermissoes 			INT PRIMARY KEY AUTO_INCREMENT,
 
-nome VARCHAR(100) 		NOT NULL,
+idPermissoes INT PRIMARY KEY AUTO_INCREMENT,
 
-descricao VARCHAR(500) 
+nome VARCHAR(100) NOT NULL,
+
+descricao VARCHAR(500)
 );
 
-CREATE TABLE CodigoValidacao (
-idCodigoValidacao 			INT AUTO_INCREMENT,
+CREATE TABLE CodigoValidacaoUsuario (
 
-fkUnidadeDeAtendimento 		INT,
+idCodigoValidacao INT AUTO_INCREMENT,
 
-fkPermissoes				INT,
+fkUnidadeDeAtendimento INT,
 
-CONSTRAINT pkCompostaCodigoValidacao PRIMARY KEY (idCodigoValidacao,fkUnidadeDeAtendimento,fkPermissoes),
+fkPermissoes INT,
 
-codigo 						CHAR(15),
+CONSTRAINT pkCompostaCodigoValidacaoUsuario PRIMARY KEY (idCodigoValidacao,fkUnidadeDeAtendimento,fkPermissoes),
 
-dataCriacao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
+codigo VARCHAR(100) NOT NULL,
 
-dataExpiracao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
+dataCriacao DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-statusCodigo 				VARCHAR(45) DEFAULT 'Pendente',
-CONSTRAINT chkStatusCodigoValidacao CHECK (statusCodigo in('Pendente','Aceito','Expirado')),
+dataExpiracao DATETIME NOT NULL,
 
-CONSTRAINT fkCodigoValidacaoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento),
-CONSTRAINT fkCodigoValidacaoPermissoes FOREIGN KEY (fkPermissoes) REFERENCES Permissoes(idPermissoes)
+statusCodigoValidacaoUsuario VARCHAR(100) DEFAULT "Pendente"
+CONSTRAINT chkStatusCodigoValidacaoUsuario CHECK (statusCodigoValidacaoUsuario in("Pendente","Aceito","Expirado")),
+
+CONSTRAINT fkCodigoValidacaoUsuarioUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento),
+CONSTRAINT fkCodigoValidacaoUsuarioPermissoes FOREIGN KEY (fkPermissoes) REFERENCES Permissoes(idPermissoes)
 );
 
 CREATE TABLE Usuario (
-idUsuario 			INT AUTO_INCREMENT,
 
-fkPermissoes 		INT,
-CONSTRAINT pkCompostaUsuario PRIMARY KEY (idUsuario,fkPermissoes),
+idUsuario INT AUTO_INCREMENT,
 
-nome VARCHAR(100) 	NOT NULL,
+fkPermissoes INT,
 
-email VARCHAR(100) 	NOT NULL,
+CONSTRAINT pkCompostaUsuario PRIMARY KEY(idUsuario,fkPermissoes),
 
-senha VARCHAR(256) 	NOT NULL,
+nome VARCHAR(100) NOT NULL,
 
-cpf 				CHAR(11),
+email VARCHAR(100) NOT NULL,
+
+senha VARCHAR(256) NOT NULL,
+
+cpf CHAR(11) NOT NULL,
 
 CONSTRAINT fkUsuarioPermissoes FOREIGN KEY (fkPermissoes) REFERENCES Permissoes(idPermissoes)
 );
 
-CREATE TABLE LogAcesso (
-idLogAcesso 				INT AUTO_INCREMENT,
+CREATE TABLE LogAcesso(
 
-fkUnidadeDeAtendimento 		INT,
+idLogAcesso INT AUTO_INCREMENT,
 
-fkUsuario 					INT,
+fkUnidadeDeAtendimento INT,
+
+fkUsuario INT,
+
 CONSTRAINT pkCompostaLogAcesso PRIMARY KEY (idLogAcesso,fkUnidadeDeAtendimento,fkUsuario),
 
-dataAcesso 					DATETIME DEFAULT CURRENT_TIMESTAMP,
+dataAcesso DATETIME DEFAULT CURRENT_TIMESTAMP,
 
 CONSTRAINT fkLogAcessoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento),
 CONSTRAINT fkLogAcessoUsuario FOREIGN KEY (fkUsuario) REFERENCES Usuario(idUsuario)
 );
 
 CREATE TABLE LogAcoes (
-idLogAcoes 				INT AUTO_INCREMENT,
 
-fkUnidadeDeAtendimento 	INT,
+idLogAcoes INT AUTO_INCREMENT,
 
-fkUsuario 				INT,
+fkUnidadeAtendimento INT,
 
-fkLogAcesso 			INT,
-CONSTRAINT pkCompostaLogAcoes PRIMARY KEY(idLogAcoes,fkUnidadeDeAtendimento,fkUsuario,fkLogAcesso),
+fkLogAceso INT,
 
-acao VARCHAR(100) 		NOT NULL,
+fkUsuario INT,
 
-horarioDaAcao 			DATETIME DEFAULT CURRENT_TIMESTAMP,
+CONSTRAINT pkCompostaLogAcoes PRIMARY KEY (idLogAcoes,fkUnidadeAtendimento,fkLogAceso,fkUsuario),
 
-CONSTRAINT fkLogAcoesUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES LogAcesso(fkUnidadeDeAtendimento),
+acao VARCHAR(100) NOT NULL,
+
+horarioDaAcao DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+CONSTRAINT fkLogAcoesUnidadeAtendimento FOREIGN KEY (fkUnidadeAtendimento) REFERENCES LogAcesso(fkUnidadeDeAtendimento),
 CONSTRAINT fkLogAcoesUsuario FOREIGN KEY (fkUsuario) REFERENCES LogAcesso(fkUsuario),
-CONSTRAINT fkLogAcoesLogAcesso FOREIGN KEY (fkLogAcesso) REFERENCES LogAcesso(idLogAcesso)
+CONSTRAINT fkLogAcoesLogAceso FOREIGN KEY (fkLogAceso) REFERENCES LogAcesso(idLogAcesso)
 );
 
--- Label Captura
+CREATE TABLE CodigoConfiguracaoMaquina(
+
+idCodigoConfiguracao INT AUTO_INCREMENT,
+
+fkUnidadeDeAtendimento INT,
+
+CONSTRAINT pkCompostaCodigoConfiguracaoMaquina PRIMARY KEY (idCodigoConfiguracao,fkUnidadeDeAtendimento),
+
+codigo VARCHAR(100) NOT NULL,
+
+dataCriacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+dataExpiracao DATETIME NOT NULL,
+
+statusCodigoConfiguracaoMaquina VARCHAR(45) DEFAULT "Pendente",
+CONSTRAINT chkstatusCodigoConfiguracaoMaquina CHECK (statusCodigoConfiguracaoMaquina in("Pendente","Aceito","Expirado")),
+
+CONSTRAINT fkCodigoConfiguracaoMaquinaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
+);
 
 CREATE TABLE Dac (
-idDac 						INT AUTO_INCREMENT,
 
-fkUnidadeDeAtendimento 		INT,
+idDac INT AUTO_INCREMENT,
+
+fkUnidadeDeAtendimento INT,
+
 CONSTRAINT pkCompostaDac PRIMARY KEY (idDac,fkUnidadeDeAtendimento),
 
-nomeDeIdentificacao 		VARCHAR(100) NOT NULL,
+nomeIdentificacao VARCHAR(100) NOT NULL,
 
-statusDac VARCHAR(45) 		DEFAULT 'Em configuração',
-CONSTRAINT chkStatusDac CHECK (statusDac in('Ativo','Inativo','Excluido','Alerta','Em configuração')),
+statusDac VARCHAR(100) DEFAULT "Em configuração",
+CONSTRAINT chkStatusDac CHECK (statusDac in("Ativo","Inativo","Excluido","Alerta","Em configuração")),
 
-codigoValidacao VARCHAR(256) 	NOT NULL,
+codigoValidacao VARCHAR(256) NOT NULL,
 
 CONSTRAINT fkDacUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
 );
 
 CREATE TABLE MedicoesDisponiveis (
-idMedicoesDisponiveis 	INT PRIMARY KEY AUTO_INCREMENT,
 
-nomeDaMedicao 			VARCHAR(100) NOT NULL,
+idMedicoesDisponiveis INT PRIMARY KEY AUTO_INCREMENT,
 
-unidadeDeMedida 	VARCHAR(45) NOT NULL
+nomeDaMedicao VARCHAR(100),
+
+unidadeDeMedida VARCHAR(100)
 );
 
 CREATE TABLE MedicoesSelecionadas (
-idMedicoesSelecionadas 	INT AUTO_INCREMENT,
 
-fkUnidadeDeAtendimento 	INT,
+idMedicoesSelecionadas INT AUTO_INCREMENT,
 
-fkDac 					INT,
+fkMedicoesDisponiveis INT,
 
-fkMedicoesDisponiveis 	INT,
-CONSTRAINT pkCompostaMedicoesSelecionadas PRIMARY KEY (idMedicoesSelecionadas,fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponiveis),
+fkDac INT,
 
-dataConfiguracao 		DATETIME DEFAULT CURRENT_TIMESTAMP,
+fkUnidadeDeAtendimento INT,
+
+CONSTRAINT pkCompostaMedicoesSelecionadas PRIMARY KEY(idMedicoesSelecionadas,fkMedicoesDisponiveis,fkDac,fkUnidadeDeAtendimento),
+
+dataConfiguracao DATETIME DEFAULT CURRENT_TIMESTAMP,
 
 CONSTRAINT fkMedicoesSelecionadasUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES Dac(fkUnidadeDeAtendimento),
 CONSTRAINT fkMedicoesSelecionadasDac FOREIGN KEY (fkDac) REFERENCES Dac(idDac),
 CONSTRAINT fkMedicoesSelecionadasMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesDisponiveis(idMedicoesDisponiveis)
 );
 
-CREATE TABLE MetricaAlerta (
-idMetricaAlerta 			INT AUTO_INCREMENT,
-
-fkUnidadeDeAtendimento 		INT,
-
-fkUnidadeDeAtendimentoDac 	INT,
-
-fkDac 						INT,
-
-fkMedicoesDisponiveis 		INT,
-CONSTRAINT pkCompostaMetricaAlerta PRIMARY KEY(idMetricaAlerta,fkUnidadeDeAtendimento,fkMedicoesDisponiveis),
-
-nomeNivel VARCHAR(45) 		NOT NULL,
-
-valorMinimo	 				FLOAT,
-
-valorMaximo 				FLOAT,
-
-dataCriacao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-CONSTRAINT fkMetricaAlertaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento),
-CONSTRAINT fkMetricaAlertaUnidadeDeAtendimentoDac FOREIGN KEY (fkUnidadeDeAtendimentoDac) REFERENCES Dac(fkUnidadeDeAtendimento),
-CONSTRAINT fkMetricaAlertaDac FOREIGN KEY (fkDac) REFERENCES Dac(idDac),
-CONSTRAINT fkMetricaAlerta FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesDisponiveis(idMedicoesDisponiveis)
-);
-
 CREATE TABLE Leitura (
-idLeitura 					INT AUTO_INCREMENT,
-fkMedicoesDisponiveis 		INT,
-fkMedicoesSelecionadas 		INT,
-fkDac 						INT,
-fkUnidadeDeAtendimento 		INT,
-CONSTRAINT pkCompostaLeitura PRIMARY KEY (idLeitura,fkMedicoesDisponiveis,fkMedicoesSelecionadas,fkDac,fkUnidadeDeAtendimento),
-medidaCapturada 			VARCHAR(45) NOT NULL,
-dataCaptura 				DATETIME DEFAULT CURRENT_TIMESTAMP,
-fkAlerta 					INT DEFAULT NULL,
-fkMetricaAlerta 			INT DEFAULT NULL,
-fkMedicoesDisponiveisAlerta INT DEFAULT NULL,
-fkMedicoesSelecionadasAlerta INT DEFAULT NULL,
-fkDacAlerta 				INT DEFAULT NULL,
-fkUnidadeDeAtendimentoAlerta INT DEFAULT NULL,
 
--- FOREIGN KEYS das PKS
-CONSTRAINT fkLeituraMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesSelecionadas(fkMedicoesDisponiveis),
-CONSTRAINT fkLeituraMedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas),
+idLeitura INT AUTO_INCREMENT,
+
+fkUnidadeDeAtendimento INT,
+
+fkMedicoesDisponiveis INT,
+
+fkDac INT,
+
+fkMedicoesSelecionadas INT,
+
+CONSTRAINT pkCompostaLeitura PRIMARY KEY (idLeitura,fkUnidadeDeAtendimento,fkMedicoesDisponiveis,fkDac,fkMedicoesSelecionadas),
+
+medidaCapturada VARCHAR(100),
+
+dataCaptura DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+CONSTRAINT fkLeituraUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES MedicoesSelecionadas(fkUnidadeDeAtendimento),
 CONSTRAINT fkLeituraDac FOREIGN KEY (fkDac) REFERENCES MedicoesSelecionadas(fkDac),
-CONSTRAINT fkLeituraUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES MedicoesSelecionadas(fkUnidadeDeAtendimento)
+CONSTRAINT fkLeituraMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesSelecionadas(fkMedicoesDisponiveis),
+CONSTRAINT fkLeituraMedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas)
+
 );
+
 CREATE TABLE Alerta (
+
 idAlerta INT AUTO_INCREMENT,
 
-fkUnidadeDeAtendimento 		INT,
+fkLeitura INT,
 
-fkDac 						INT,
+fkDac INT,
 
-fkMedicoesDisponiveis 		INT,
+fkMedicoesSelecionadas INT,
 
-fkMedicoesSelecionadas 		INT,
+fkUnidadeDeAtendimento INT,
 
-fkLeitura 					INT,
-CONSTRAINT pkCompostaAlerta PRIMARY KEY (idAlerta,fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponiveis,fkMedicoesSelecionadas,fkLeitura),
+fkMedicoesDisponiveis INT,
 
-dataInicio 					DATETIME DEFAULT CURRENT_TIMESTAMP,
+CONSTRAINT pkCompostaAlerta PRIMARY KEY (idAlerta,fkLeitura,fkDac,fkMedicoesSelecionadas,fkUnidadeDeAtendimento,fkMedicoesDisponiveis),
 
-dataTermino 				DATETIME DEFAULT NULL,
+dataDoAlerta DATETIME DEFAULT CURRENT_TIMESTAMP,
 
 CONSTRAINT fkAlertaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES Leitura(fkUnidadeDeAtendimento),
 CONSTRAINT fkAlertaDac FOREIGN KEY (fkDac) REFERENCES Leitura(fkDac),
-CONSTRAINT fkMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES Leitura(fkMedicoesDisponiveis),
+CONSTRAINT fkAlertaMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES Leitura(fkMedicoesDisponiveis),
 CONSTRAINT fkAlertaMedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas) REFERENCES Leitura(fkMedicoesSelecionadas),
 CONSTRAINT fkAlertaLeitura FOREIGN KEY (fkLeitura) REFERENCES Leitura(idLeitura)
 );
+
+CREATE TABLE MetricaAlerta (
+
+idMetricaAlerta INT AUTO_INCREMENT,
+
+fkMedicoesDisponiveis INT,
+
+fkUnidadeDeAtendimento INT,
+
+CONSTRAINT pkCompostaMetricaAlerta PRIMARY KEY (idMetricaAlerta,fkMedicoesDisponiveis,fkUnidadeDeAtendimento),
+
+fkDac INT,
+
+fkUnidadeDeAtendimentoDac INT,
+
+nomeNivel VARCHAR(100) NOT NULL,
+
+valorMinimo FLOAT,
+
+valorMaximo FLOAT,
+
+dataCriacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+-- Fks Fracas
+CONSTRAINT fkMetricaAlertaMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesDisponiveis(idMedicoesDisponiveis),
+CONSTRAINT fkMetricaAlertaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento),
+-- Fks Fortes
+CONSTRAINT fkMetricaAlertaDac FOREIGN KEY (fkDac) REFERENCES Dac(idDac),
+CONSTRAINT fkMetricaAlertaUnidadeDeAtendimentoDac FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES Dac(fkUnidadeDeAtendimento)
+);
+
+
 
 DROP USER IF EXISTS logan;
 CREATE USER 'logan'@'%' IDENTIFIED BY 'senha-segura123';
