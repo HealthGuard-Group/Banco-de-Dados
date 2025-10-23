@@ -1,6 +1,12 @@
 use HealthGuard;
 
-INSERT INTO MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALUES
+-- Adicionando as permissões
+INSERT INTO healthguard.permissoes(nome,descricao) VALUES
+('Gestor TI',"Todas as funções do Analista TI e incluso visualizar logs de ações e adicionar funcionários"),
+('Analista TI','Pode visualizar a dashboard e adicionar uma nova máquina');
+
+-- Adicionando os monitoramentos
+INSERT INTO HealthGuard.MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALUES
 ('Porcentagem de uso da CPU','%'),
 ('Frequência de uso da CPU','GHz'),
 ('Uso da Memória RAM','%'),
@@ -10,24 +16,24 @@ INSERT INTO MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALUES
 ('Espaço do Disco','GB');
 
 -- Inserções na tabela UnidadeDeAtendimento
-INSERT INTO UnidadeDeAtendimento (razaoSocial, nomeFantasia, cnpj, unidadeGestora)
-VALUES ('Hospital Vida Ltda', 'Hospital Vida', '12345678000195', 'Secretaria da Saúde');
-
-INSERT INTO UnidadeDeAtendimento (razaoSocial, nomeFantasia, cnpj, unidadeGestora)
-VALUES ('Clínica Bem Estar SA', NULL, '98765432000177', 'Secretaria da Saúde');
+INSERT INTO HealthGuard.UnidadeDeAtendimento (razaoSocial, nomeFantasia, cnpj, unidadeGestora) VALUES 
+('HealthGuard LTDA', 'HealthGuard', '12345678000195', 'Secretaria da Saúde');
 
 -- Inserções na tabela CodigoConfiguracao
-INSERT INTO CodigoConfiguracao (fkUnidadeDeAtendimento, codigo, dataExpiracao, statusCodigo)
-VALUES (1, 'ABC123DEF456GHI78901', '2025-12-31 23:59:59', 'Pendente');
+INSERT INTO CodigoConfiguracaoMaquina (fkUnidadeDeAtendimento, codigo, dataExpiracao,statusCodigoConfiguracaoMaquina) VALUES
+-- Códigos para ativação 
+(1, 'ABC123DEF456GHI78901', '2026-01-01 23:59:59','Pendente'),
+(1, 'AYGDSIASKDPNKODASJ28', '2026-01-01 23:59:59','Pendente'),
+-- Códigos de erro para teste
+(1, 'ifiosijoASDUasjd1828', '2024-01-01 23:59:59','Pendente'),
+(1, 'idasisgias9238919287', '2024-01-01 23:59:59','Expirado'),
+(1, 'hsjboaisofiiasoidasi', '2026-01-01 23:59:59','Aceito');
 
-INSERT INTO CodigoConfiguracao (fkUnidadeDeAtendimento, codigo, dataExpiracao, statusCodigo)
-VALUES (2, 'XYZ987LMN654OPQ32102', '2025-10-31 23:59:59', 'Aceito');
-
+-- Inserido uma máquina
 INSERT INTO Dac (fkUnidadeDeAtendimento,codigoValidacao,nomeDeIdentificacao) VALUES
-(1,"ABC123DEF456GHI78901","Arthur Machine");
-UPDATE HealthGuard.CodigoConfiguracao SET statusCodigo = 'Pendente' WHERE idCodigoConfiguracao = 1;
-select * from CodigoConfiguracao;
-select * from Dac;
+(1,"ABC123DEF456GHI78901","Máquina A-01");
+
+-- Inserção para a configuração de todos os monitoramentos
 INSERT INTO MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponiveis) VALUES
 (1,1,1),
 (1,1,2),
@@ -37,52 +43,72 @@ INSERT INTO MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMedicoesDisponi
 (1,1,6),
 (1,1,7);
 
--- Inserts Para o cadastro e Login
-INSERT INTO healthguard.permissoes(nome,descricao) VALUES
-('Gestor TI',"Todas as funções do Analista TI e incluso visualizar logs de ações e adicionar funcionários"),
-('Analista TI','Pode visualizar a dashboard e adicionar uma nova máquina');
+INSERT INTO healthguard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataExpiracao, statusCodigo) VALUES
+-- Convites para utilização
+(1, 1, 'A1B2C3D4E5F6G7H','2026-01-01 23:59:00', 'Pendente'),
+(1, 2, 'UAISODSAIDSAJJ7','2026-01-01 23:59:00', 'Pendente'),
+-- Convites para testes de erro
+(1, 1, 'AUHIDUDAIUDAIU9','2025-01-01 23:59:00', 'Pendente'),
+(1, 2, 'AUDUDASG3456HBD','2025-01-01 23:59:00', 'Pendente'),
+(1, 1, 'NOVAKISSINGI976','2025-01-01 23:59:00', 'Expirado'),
+(1, 2, 'DSAUSADHUIIOAIA','2025-01-01 23:59:00', 'Expirado'),
+(1, 1, 'AHDJSADISA98212','2026-01-01 23:59:00', 'Aceito'),
+(1, 2, 'PJOKOSDAUSDSIAH','2026-01-01 23:59:00', 'Aceito');
 
-INSERT INTO healthguard.CodigoValidacao 
-(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataCriacao, dataExpiracao, statusCodigo)
-VALUES
--- 1 - Expirado
-(1, 1, 'A1B2C3D4E5F6G7H', '2025-05-10 14:20:00', '2025-06-10 14:20:00', 'Expirado'),
+-- Inserção de máquinas DAC
+INSERT INTO Dac (fkUnidadeDeAtendimento, nomeIdentificacao, statusDac, codigoValidacao) VALUES
+(1, 'Maquina A-02', 'Ativo', 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6'),
+(1, 'Maquina A-03', 'Ativo', 'q9r8s7t6u5v4w3x2y1z0a1b2c3d4e5f6'),
+(1, 'Maquina A-04', 'Ativo', 'g7h8i9j0k1l2m3n4o5p6q9r8s7t6u5v4'),
+(1, 'Maquina A-05', 'Inativo', 'w3x2y1z0a1b2c3d4e5f6g7h8i9j0k1l2'),
+(1, 'Maquina A-06', 'Ativo', 'm3n4o5p6q9r8s7t6u5v4w3x2y1z0a1b2'),
+(1, 'Maquina A-07', 'Ativo', 'c3d4e5f6g7h8i9j0k1l2m3n4o5p6q9r8'),
+(1, 'Maquina A-08', 'Alerta', 's7t6u5v4w3x2y1z0a1b2c3d4e5f6g7h8'),
+(1, 'Maquina A-09', 'Ativo', 'i9j0k1l2m3n4o5p6q9r8s7t6u5v4w3x2'),
+(1, 'Maquina A-10', 'Ativo', 'y1z0a1b2c3d4e5f6g7h8i9j0k1l2m3n4'),
+(1, 'Maquina B-01', 'Ativo', 'o5p6q9r8s7t6u5v4w3x2y1z0a1b2c3d4'),
+(1, 'Maquina B-02', 'Ativo', 'e5f6g7h8i9j0k1l2m3n4o5p6q9r8s7t6'),
+(1, 'Maquina B-03', 'Excluido', 'u5v4w3x2y1z0a1b2c3d4e5f6g7h8i9j0'),
+(1, 'Maquina B-04', 'Ativo', 'k1l2m3n4o5p6q9r8s7t6u5v4w3x2y1z0'),
+(1, 'Maquina B-05', 'Ativo', 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6'),
+(1, 'Maquina B-06', 'Ativo', 'q9r8s7t6u5v4w3x2y1z0a1b2c3d4e5f6'),
+(1, 'Maquina B-07', 'Em configuração', 'g7h8i9j0k1l2m3n4o5p6q9r8s7t6u5v4'),
+(1, 'Maquina B-08', 'Ativo', 'w3x2y1z0a1b2c3d4e5f6g7h8i9j0k1l2'),
+(1, 'Maquina B-09', 'Ativo', 'm3n4o5p6q9r8s7t6u5v4w3x2y1z0a1b2'),
+(1, 'Maquina C-01', 'Ativo', 'c3d4e5f6g7h8i9j0k1l2m3n4o5p6q9r8'),
+(1, 'Maquina C-02', 'Ativo', 's7t6u5v4w3x2y1z0a1b2c3d4e5f6g7h8'),
+(1, 'Maquina C-03', 'Ativo', 'i9j0k1l2m3n4o5p6q9r8s7t6u5v4w3x2'),
+(1, 'Maquina C-04', 'Ativo', 'y1z0a1b2c3d4e5f6g7h8i9j0k1l2m3n4'),
+(1, 'Maquina C-05', 'Inativo', 'o5p6q9r8s7t6u5v4w3x2y1z0a1b2c3d4'),
+(1, 'Maquina C-06', 'Ativo', 'e5f6g7h8i9j0k1l2m3n4o5p6q9r8s7t6'),
+(1, 'Maquina C-07', 'Ativo', 'u5v4w3x2y1z0a1b2c3d4e5f6g7h8i9j0'),
+(1, 'Maquina C-08', 'Ativo', 'k1l2m3n4o5p6q9r8s7t6u5v4w3x2y1z0'),
+(1, 'Maquina C-09', 'Alerta', 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6'),
+(1, 'Maquina D-01', 'Ativo', 'q9r8s7t6u5v4w3x2y1z0a1b2c3d4e5f6'),
+(1, 'Maquina D-02', 'Ativo', 'g7h8i9j0k1l2m3n4o5p6q9r8s7t6u5v4'),
+(1, 'Maquina D-03', 'Ativo', 'w3x2y1z0a1b2c3d4e5f6g7h8i9j0k1l2'),
+(1, 'Maquina D-04', 'Ativo', 'm3n4o5p6q9r8s7t6u5v4w3x2y1z0a1b2'),
+(1, 'Maquina D-05', 'Ativo', 'c3d4e5f6g7h8i9j0k1l2m3n4o5p6q9r8'),
+(1, 'Maquina D-06', 'Excluido', 's7t6u5v4w3x2y1z0a1b2c3d4e5f6g7h8'),
+(1, 'Maquina D-07', 'Ativo', 'i9j0k1l2m3n4o5p6q9r8s7t6u5v4w3x2'),
+(1, 'Maquina D-08', 'Ativo', 'y1z0a1b2c3d4e5f6g7h8i9j0k1l2m3n4'),
+(1, 'Maquina D-09', 'Ativo', 'o5p6q9r8s7t6u5v4w3x2y1z0a1b2c3d4'),
+(1, 'Maquina E-01', 'Ativo', 'e5f6g7h8i9j0k1l2m3n4o5p6q9r8s7t6'),
+(1, 'Maquina E-02', 'Em configuração', 'u5v4w3x2y1z0a1b2c3d4e5f6g7h8i9j0'),
+(1, 'Maquina E-03', 'Ativo', 'k1l2m3n4o5p6q9r8s7t6u5v4w3x2y1z0'),
+(1, 'Maquina E-04', 'Ativo', 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6'),
+(1, 'Maquina E-05', 'Ativo', 'q9r8s7t6u5v4w3x2y1z0a1b2c3d4e5f6'),
+(1, 'Maquina E-06', 'Ativo', 'g7h8i9j0k1l2m3n4o5p6q9r8s7t6u5v4'),
+(1, 'Maquina E-07', 'Ativo', 'w3x2y1z0a1b2c3d4e5f6g7h8i9j0k1l2'),
+(1, 'Maquina E-08', 'Ativo', 'm3n4o5p6q9r8s7t6u5v4w3x2y1z0a1b2'),
+(1, 'Maquina E-09', 'Ativo', 'c3d4e5f6g7h8i9j0k1l2m3n4o5p6q9r8'),
+(1, 'Maquina F-01', 'Ativo', 's7t6u5v4w3x2y1z0a1b2c3d4e5f6g7h8'),
+(1, 'Maquina F-02', 'Inativo', 'i9j0k1l2m3n4o5p6q9r8s7t6u5v4w3x2'),
+(1, 'Maquina F-03', 'Ativo', 'y1z0a1b2c3d4e5f6g7h8i9j0k1l2m3n4'),
+(1, 'Maquina F-04', 'Alerta', 'o5p6q9r8s7t6u5v4w3x2y1z0a1b2c3d4'),
+(1, 'Maquina F-05', 'Ativo', 'e5f6g7h8i9j0k1l2m3n4o5p6q9r8s7t6');
 
--- 2 - Expirado
-(1, 2, 'K9L8M7N6O5P4Q3R', '2025-04-01 09:00:00', '2025-05-01 09:00:00', 'Expirado'),
 
--- 3 - Aceito
-(1, 1, 'Z1Y2X3W4V5U6T7S', '2025-07-12 11:35:00', '2025-08-12 11:35:00', 'Aceito'),
 
--- 4 - Aceito
-(1, 2, 'P0O9I8U7Y6T5R4E', '2025-07-25 08:00:00', '2025-08-25 08:00:00', 'Aceito'),
 
--- 5 - Pedente (data expirada → útil pra testar erro de lógica)
-(1, 1, 'M1N2B3V4C5X6Z7A', '2025-06-15 15:10:00', '2025-07-15 15:10:00', 'Pendente'),
 
--- 6 - Pedente
-(1, 2, 'L0K9J8H7G6F5D4S', '2025-09-01 10:45:00', '2026-09-30 10:45:00', 'Pendente'),
-
--- 7 - Expirado
-(1, 1, 'R3T4Y5U6I7O8P9Q', '2025-02-10 13:22:00', '2025-03-10 13:22:00', 'Expirado'),
-
--- 8 - Aceito
-(1, 2, 'E1D2C3B4A5S6D7F', '2025-03-01 18:00:00', '2025-04-01 18:00:00', 'Aceito'),
-
--- 9 - Pedente
-(1, 1, 'H1G2F3E4D5C6B7A', '2025-08-05 07:15:00', '2026-09-05 07:15:00', 'Pendente'),
-
--- 10 - Expirado
-(1, 2, 'W9Q8E7R6T5Y4U3I', '2025-01-10 16:30:00', '2025-02-10 16:30:00', 'Expirado');
-
-select * from CodigoValidacao where statusCodigo = "Pendente";
-
-SELECT * from usuario;
-
-select * from LogAcesso;
-
-select * from LogAcoes;
-
-describe LogAcesso;
-
-SELECT idLogAcesso FROM logAcesso WHERE fkUnidadeDeAtendimento = 1 AND fkUsuario = 1 ORDER BY idLogAcesso DESC LIMIT 1;

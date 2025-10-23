@@ -15,8 +15,7 @@ nomeFantasia VARCHAR(100) NOT NULL,
 
 cnpj CHAR(14) NOT NULL,
 
-unidadeGestora VARCHAR(100) NOT NULL,
-CONSTRAINT chkUnidadeGestora CHECK (unidadeGestora in("Federal","Estadual","Municipal"))
+unidadeGestora VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE TipoDeContato (
