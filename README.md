@@ -66,5 +66,5 @@
         <strong>Acesse a aplicação pelo navegador: </strong> A aplicação irá rodar na porta 3333 (http://localhost:3333).
     </li>
 </ol>
-<h2>Autor</h2>
-<p>O projeto foi desenvolvido por Beatriz Carvalho, João Franco, Felipe Ferraz, Matheus Chiosini e Ryan Patric - 1SISA.</p>
+<h2>Autores</h2>
+<p>O projeto foi desenvolvido pela HealthGuard.</p>
