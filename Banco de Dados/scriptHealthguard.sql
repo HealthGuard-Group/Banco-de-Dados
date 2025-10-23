@@ -160,7 +160,7 @@ CONSTRAINT pkCompostaUsuario PRIMARY KEY(idUsuario,fkPermissoes),
 
 nome VARCHAR(100) NOT NULL,
 
-email VARCHAR(100) NOT NULL,
+email VARCHAR(100) NOT NULL UNIQUE,
 
 senha VARCHAR(256) NOT NULL,
 
