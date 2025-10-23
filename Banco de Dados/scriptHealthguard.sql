@@ -75,8 +75,8 @@ dataCriacao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
 
 dataExpiracao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-statusCodigo 				VARCHAR(45) DEFAULT 'Pedente',
-CONSTRAINT chkStatusCodigoConfiguracao CHECK (statusCodigo in('Pedente','Aceito','Expirado')),
+statusCodigo 				VARCHAR(45) DEFAULT 'Pendente',
+CONSTRAINT chkStatusCodigoConfiguracao CHECK (statusCodigo in('Pendente','Aceito','Expirado')),
 
 CONSTRAINT fkCodigoConfiguracaoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
 );
@@ -106,8 +106,8 @@ dataCriacao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
 
 dataExpiracao 				DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-statusCodigo 				VARCHAR(45) DEFAULT 'Pedente',
-CONSTRAINT chkStatusCodigoValidacao CHECK (statusCodigo in('Pedente','Aceito','Expirado')),
+statusCodigo 				VARCHAR(45) DEFAULT 'Pendente',
+CONSTRAINT chkStatusCodigoValidacao CHECK (statusCodigo in('Pendente','Aceito','Expirado')),
 
 CONSTRAINT fkCodigoValidacaoUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento),
 CONSTRAINT fkCodigoValidacaoPermissoes FOREIGN KEY (fkPermissoes) REFERENCES Permissoes(idPermissoes)
@@ -173,8 +173,8 @@ CONSTRAINT pkCompostaDac PRIMARY KEY (idDac,fkUnidadeDeAtendimento),
 
 nomeDeIdentificacao 		VARCHAR(100) NOT NULL,
 
-statusDac VARCHAR(45) 		DEFAULT 'Inativo',
-CONSTRAINT chkStatusDac CHECK (statusDac in('Ativo','Inativo','Excluido')),
+statusDac VARCHAR(45) 		DEFAULT 'Em configuração',
+CONSTRAINT chkStatusDac CHECK (statusDac in('Ativo','Inativo','Excluido','Alerta','Em configuração')),
 
 codigoValidacao VARCHAR(256) 	NOT NULL,
 
