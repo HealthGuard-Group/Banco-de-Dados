@@ -25,9 +25,9 @@ idTipoDeContato INT PRIMARY KEY AUTO_INCREMENT,
 formaDeContato VARCHAR(100)
 );
 
-CREATE TABLE DiasDisponibilidade (
+CREATE TABLE TipoDia (
 
-idDiasDisponibibilidade INT PRIMARY KEY AUTO_INCREMENT,
+idTipoDia INT PRIMARY KEY AUTO_INCREMENT,
 
 nome VARCHAR(100)
 );
@@ -94,25 +94,25 @@ CONSTRAINT fkMeioDeContatoContatoParaAlertas FOREIGN KEY (fkContatoParaAlertas) 
 CONSTRAINT fkMeioDeContatoTipodeContato FOREIGN KEY (fkTipodeContato) REFERENCES TipoDeContato(idTipoDeContato)
 );
 
-CREATE TABLE DiasDisponiveis (
+CREATE TABLE HorarioDisponibilidade (
 
-idDiasDisponiveis INT AUTO_INCREMENT,
+idHorarioDisponibilidade INT AUTO_INCREMENT,
 
 fkContatoParaAlertas INT,
 
 fkUnidadeDeAtendimento INT,
 
-fkDiasDisponibibilidade INT,
+fkTipoDia INT,
 
-CONSTRAINT pkCompostaDiasDisponiveis PRIMARY KEY (idDiasDisponiveis,fkContatoParaAlertas,fkUnidadeDeAtendimento,fkDiasDisponibibilidade),
+CONSTRAINT pkCompostaDiasDisponiveis PRIMARY KEY (idHorarioDisponibilidade,fkContatoParaAlertas,fkUnidadeDeAtendimento,fkTipoDia),
 
 horarioEntrada TIME,
 
 horarioSaida TIME,
 
-CONSTRAINT fkDiasDisponiveisUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES ContatosParaAlerta(fkUnidadeDeAtendimento),
-CONSTRAINT fkDiasDisponiveisContatoParaAlertas FOREIGN KEY (fkContatoParaAlertas) REFERENCES ContatosParaAlerta(idContatosParaAlerta),
-CONSTRAINT fkDiasDisponiveisDiasDisponibibilidade FOREIGN KEY (fkDiasDisponibibilidade) REFERENCES DiasDisponibilidade(idDiasDisponibibilidade)
+CONSTRAINT fkHorarioDisponibilidadeUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES ContatosParaAlerta(fkUnidadeDeAtendimento),
+CONSTRAINT fkHorarioDisponibilidadeContatoParaAlertas FOREIGN KEY (fkContatoParaAlertas) REFERENCES ContatosParaAlerta(idContatosParaAlerta),
+CONSTRAINT fkHorarioDisponibilidadeTipoDia FOREIGN KEY (fkTipoDia) REFERENCES TipoDia(idTipoDia)
 );
 
 -- Label entidades relacionadas ao usuário
