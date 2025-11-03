@@ -200,7 +200,7 @@ fkUsuario INT,
 
 CONSTRAINT pkCompostaLogAcoes PRIMARY KEY (idLogAcoes,fkUnidadeAtendimento,fkLogAceso,fkUsuario),
 
-acao VARCHAR(100) NOT NULL,
+acao VARCHAR(1000) NOT NULL,
 
 horarioDaAcao DATETIME DEFAULT CURRENT_TIMESTAMP,
 
