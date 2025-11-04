@@ -147,6 +147,10 @@ dataCriacao DATETIME DEFAULT CURRENT_TIMESTAMP,
 
 dataExpiracao DATETIME NOT NULL,
 
+emailSugerido VARCHAR(100) NOT NULL,
+
+nomeSugerido VARCHAR(100) NOT NULL,
+
 statusCodigoValidacaoUsuario VARCHAR(100) DEFAULT "Pendente",
 
 CONSTRAINT chkStatusCodigoValidacaoUsuario CHECK (statusCodigoValidacaoUsuario in("Pendente","Aceito","Expirado")),
