@@ -36,17 +36,10 @@ INSERT INTO HealthGuard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMed
 (1,1,3),
 (1,1,4);
 
-INSERT INTO HealthGuard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataExpiracao, statusCodigoValidacaoUsuario) VALUES
+INSERT INTO HealthGuard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataExpiracao, statusCodigoValidacaoUsuario,emailSugerido,nomeSugerido) VALUES
 -- Convites para utilização
-(1, 1, 'A1B2C3D4E5F6G7H','2026-01-01 23:59:00', 'Pendente'),
-(1, 2, 'UAISODSAIDSAJJ7','2026-01-01 23:59:00', 'Pendente'),
--- Convites para testes de erro
-(1, 1, 'AUHIDUDAIUDAIU9','2025-01-01 23:59:00', 'Pendente'),
-(1, 2, 'AUDUDASG3456HBD','2025-01-01 23:59:00', 'Pendente'),
-(1, 1, 'NOVAKISSINGI976','2025-01-01 23:59:00', 'Expirado'),
-(1, 2, 'DSAUSADHUIIOAIA','2025-01-01 23:59:00', 'Expirado'),
-(1, 1, 'AHDJSADISA98212','2026-01-01 23:59:00', 'Aceito'),
-(1, 2, 'PJOKOSDAUSDSIAH','2026-01-01 23:59:00', 'Aceito');
+(1, 1, 'A1B2C3D4E5F6G7H','2026-01-01 23:59:00', 'Pendente',"arthur.amahals1000@gmail.com","Arthur Felipe Amaral da Silva"),
+(1, 2, 'UAISODSAIDSAJJ7','2026-01-01 23:59:00', 'Pendente',"yuri.boechat@sptech.school","Yuri boechat da Silva");
 
 -- Inserção de máquinas DAC
 INSERT INTO HealthGuard.Dac (fkUnidadeDeAtendimento, nomeIdentificacao, statusDac, codigoValidacao) VALUES
