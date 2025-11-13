@@ -38,8 +38,8 @@ INSERT INTO HealthGuard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMed
 
 INSERT INTO HealthGuard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataExpiracao, statusCodigoValidacaoUsuario,emailSugerido,nomeSugerido) VALUES
 -- Convites para utilização
-(1, 1, 'A1B2C3D4E5F6G7H','2026-01-01 23:59:00', 'Pendente',"arthur.amahals1000@gmail.com","Arthur Felipe Amaral da Silva"),
-(1, 2, 'UAISODSAIDSAJJ7','2026-01-01 23:59:00', 'Pendente',"yuri.boechat@sptech.school","Yuri boechat da Silva");
+(1, 1, '1234567890','2026-01-01 23:59:00', 'Pendente',"arthur.amahals1000@gmail.com","Arthur Felipe Amaral da Silva"),
+(1, 2, '0987654321','2026-01-01 23:59:00', 'Pendente',"yuri.boechat@sptech.school","Yuri boechat da Silva");
 
 -- Inserção de máquinas DAC
 INSERT INTO HealthGuard.Dac (fkUnidadeDeAtendimento, nomeIdentificacao, statusDac, codigoValidacao) VALUES

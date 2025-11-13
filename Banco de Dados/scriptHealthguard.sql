@@ -153,7 +153,7 @@ nomeSugerido VARCHAR(100) NOT NULL,
 
 statusCodigoValidacaoUsuario VARCHAR(100) DEFAULT "Pendente",
 
-CONSTRAINT chkStatusCodigoValidacaoUsuario CHECK (statusCodigoValidacaoUsuario in("Pendente","Aceito","Expirado")),
+CONSTRAINT chkStatusCodigoValidacaoUsuario CHECK (statusCodigoValidacaoUsuario in("Pendente","Aceito","Expirado","Revogado")),
 
 CONSTRAINT fkCodigoValidacaoUsuarioUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento),
 CONSTRAINT fkCodigoValidacaoUsuarioPermissoes FOREIGN KEY (fkPermissoes) REFERENCES Permissoes(idPermissoes)
@@ -161,7 +161,7 @@ CONSTRAINT fkCodigoValidacaoUsuarioPermissoes FOREIGN KEY (fkPermissoes) REFEREN
 
 CREATE TABLE Usuario (
 
-idUsuario INT AUTO_INCREMENT PRIMARY KEY, -- ALTERAÇÃO: idUsuario é agora a PK simples
+idUsuario INT AUTO_INCREMENT PRIMARY KEY, 
 fkPermissoes INT,
 
 nome VARCHAR(100) NOT NULL,
@@ -208,9 +208,29 @@ acao VARCHAR(1000) NOT NULL,
 
 horarioDaAcao DATETIME DEFAULT CURRENT_TIMESTAMP,
 
+statusAcao VARCHAR(100),
+
 CONSTRAINT fkLogAcoes_LogAcesso FOREIGN KEY (fkLogAceso, fkUnidadeAtendimento, fkUsuario)
     REFERENCES LogAcesso(idLogAcesso, fkUnidadeDeAtendimento, fkUsuario)
 
+);
+
+CREATE TABLE CodigoRecuperacaoSenha (
+
+idCodigoRecuperacaoSenha INT AUTO_INCREMENT,
+
+fkPermissoes INT,
+
+fkUsuario INT UNIQUE,
+
+CONSTRAINT pkCompostaCodigoRecuperacaoSenha PRIMARY KEY (idCodigoRecuperacaoSenha,fkPermissoes,fkUsuario),
+
+codigo CHAR(10) NOT NULL,
+
+dataCriacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+CONSTRAINT fkCodigoRecuperacaoSenhaUsuario FOREIGN KEY (fkUsuario) REFERENCES Usuario(idUsuario),
+CONSTRAINT fkCodigoRecuperacaoSenhaPermissoes FOREIGN KEY (fkPermissoes) REFERENCES Usuario(fkPermissoes)
 );
 
 CREATE TABLE CodigoConfiguracaoMaquina(
