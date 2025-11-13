@@ -225,7 +225,7 @@ fkUsuario INT UNIQUE,
 
 CONSTRAINT pkCompostaCodigoRecuperacaoSenha PRIMARY KEY (idCodigoRecuperacaoSenha,fkPermissoes,fkUsuario),
 
-codigo CHAR(10) NOT NULL,
+codigo CHAR(6) NOT NULL,
 
 dataCriacao DATETIME DEFAULT CURRENT_TIMESTAMP,
 
