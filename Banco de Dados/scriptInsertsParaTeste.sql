@@ -8,6 +8,9 @@ INSERT INTO HealthGuard.Permissoes(nome,descricao) VALUES
 INSERT INTO HealthGuard.MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALUES
 ('Porcentagem de uso da CPU','%'),
 ('Uso da Memória RAM','%'),
+('Memória RAM Total','GB'),
+('Uso Memória SWAP','%'),
+('Memória SWAP Total','GB'),
 ('Uso de disco','%'),
 ('Conexão com a rede','I/O');
 
@@ -34,7 +37,10 @@ INSERT INTO HealthGuard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMed
 (1,1,1),
 (1,1,2),
 (1,1,3),
-(1,1,4);
+(1,1,4),
+(1,1,5),
+(1,1,6),
+(1,1,7);
 
 INSERT INTO HealthGuard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataExpiracao, statusCodigoValidacaoUsuario,emailSugerido,nomeSugerido) VALUES
 -- Convites para utilização

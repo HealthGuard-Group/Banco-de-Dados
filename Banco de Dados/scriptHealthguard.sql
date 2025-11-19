@@ -268,6 +268,8 @@ CONSTRAINT chkStatusDac CHECK (statusDac in("Ativo","Inativo","Excluido","Alerta
 
 codigoValidacao VARCHAR(256) NOT NULL,
 
+descricao VARCHAR(500) DEFAULT "",
+
 CONSTRAINT fkDacUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
 );
 
