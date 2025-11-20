@@ -209,7 +209,7 @@ CREATE TABLE MetricaAlerta (
     fkUnidadeDeAtendimento INT,
     CONSTRAINT pkCompostaMetricaAlerta PRIMARY KEY (idMetricaAlerta, fkMedicoesDisponiveis, fkUnidadeDeAtendimento),
     fkDac INT,
-    fkUnidadeDeAtendimentoDac INT, -- Adicionada esta coluna pois ela é usada na FK abaixo
+    fkUnidadeDeAtendimentoDac INT, 
     nomeNivel VARCHAR(100) NOT NULL,
     valorMinimo FLOAT,
     valorMaximo FLOAT,
