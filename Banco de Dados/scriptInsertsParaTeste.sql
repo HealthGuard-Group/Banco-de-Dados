@@ -30,12 +30,7 @@ INSERT INTO HealthGuard.UnidadeDeAtendimento (razaoSocial, nomeFantasia, cnpj, u
 -- Inserções na tabela CodigoConfiguracao
 INSERT INTO HealthGuard.CodigoConfiguracaoMaquina (fkUnidadeDeAtendimento, codigo, dataExpiracao,statusCodigoConfiguracaoMaquina) VALUES
 -- Códigos para ativação 
-(1, 'ABC123DEF456GHI78901', '2026-01-01 23:59:59','Pendente'),
-(1, 'AYGDSIASKDPNKODASJ28', '2026-01-01 23:59:59','Pendente'),
--- Códigos de erro para teste
-(1, 'ifiosijoASDUasjd1828', '2024-01-01 23:59:59','Pendente'),
-(1, 'idasisgias9238919287', '2024-01-01 23:59:59','Expirado'),
-(1, 'hsjboaisofiiasoidasi', '2026-01-01 23:59:59','Aceito');
+(1, 'ABC123DEF456GHI78901', '2026-01-01 23:59:59','Pendente');
 
 -- Inserido uma máquina
 INSERT INTO HealthGuard.Dac (fkUnidadeDeAtendimento,codigoValidacao,nomeIdentificacao) VALUES
@@ -59,6 +54,14 @@ INSERT INTO HealthGuard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMed
 (1,1,14),
 (1,1,15),
 (1,1,16);
+
+INSERT INTO MetricaAlerta VALUES
+(DEFAULT,1,1,DEFAULT,DEFAULT,"Atenção",70.00,85.00,DEFAULT,DEFAULT),
+(DEFAULT,1,1,DEFAULT,DEFAULT,"Alerta",85.01,100.00,DEFAULT,DEFAULT),
+(DEFAULT,6,1,DEFAULT,DEFAULT,"Atenção",70.00,85.00,DEFAULT,DEFAULT),
+(DEFAULT,6,1,DEFAULT,DEFAULT,"Alerta",85.01,100.00,DEFAULT,DEFAULT),
+(DEFAULT,10,1,DEFAULT,DEFAULT,"Atenção",70.00,85.00,DEFAULT,DEFAULT),
+(DEFAULT,10,1,DEFAULT,DEFAULT,"Alerta",85.01,100.00,DEFAULT,DEFAULT);
 
 INSERT INTO HealthGuard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataExpiracao, statusCodigoValidacaoUsuario,emailSugerido,nomeSugerido) VALUES
 -- Convites para utilização
