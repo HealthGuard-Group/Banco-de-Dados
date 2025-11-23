@@ -57,7 +57,8 @@ INSERT INTO HealthGuard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMed
 (1,1,12),
 (1,1,13),
 (1,1,14),
-(1,1,15);
+(1,1,15),
+(1,1,16);
 
 INSERT INTO HealthGuard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataExpiracao, statusCodigoValidacaoUsuario,emailSugerido,nomeSugerido) VALUES
 -- Convites para utilização

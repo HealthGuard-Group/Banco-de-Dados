@@ -185,7 +185,7 @@ CREATE TABLE Leitura (
     fkDac INT,
     fkMedicoesSelecionadas INT,
     CONSTRAINT pkCompostaLeitura PRIMARY KEY (idLeitura, fkUnidadeDeAtendimento, fkMedicoesDisponiveis, fkDac, fkMedicoesSelecionadas),
-    medidaCapturada VARCHAR(100),
+    medidaCapturada VARCHAR(500),
     dataCaptura DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fkLeitura_MedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento)
         REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento)
