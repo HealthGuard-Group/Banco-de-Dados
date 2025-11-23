@@ -99,6 +99,7 @@ CREATE TABLE Usuario (
     email VARCHAR(100) NOT NULL UNIQUE,
     senha VARCHAR(256) NOT NULL,
     cpf CHAR(11) NOT NULL,
+    statusUsuario VARCHAR(100) DEFAULT 'Ativo',
     CONSTRAINT fkUsuarioPermissoes FOREIGN KEY (fkPermissoes) REFERENCES Permissoes(idPermissoes)
 );
 
@@ -214,6 +215,7 @@ CREATE TABLE MetricaAlerta (
     valorMinimo FLOAT,
     valorMaximo FLOAT,
     dataCriacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+    statusVisto VARCHAR(100) DEFAULT 'Não visto',
     CONSTRAINT fkMetricaAlertaMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesDisponiveis(idMedicoesDisponiveis),
     CONSTRAINT fkMetricaAlertaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento),
     CONSTRAINT fkMetricaAlerta_Dac FOREIGN KEY (fkDac, fkUnidadeDeAtendimentoDac) 

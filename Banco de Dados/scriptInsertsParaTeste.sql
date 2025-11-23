@@ -1,8 +1,8 @@
 
 -- Adicionando as permissões
 INSERT INTO HealthGuard.Permissoes(nome,descricao) VALUES
-('Gestor TI',"Todas as funções do Analista TI e incluso visualizar logs de ações e adicionar funcionários"),
-('Analista TI','Pode visualizar a dashboard e adicionar uma nova máquina');
+('Gestor de TI',"Todas as funções do Analista TI e incluso visualizar logs de ações e adicionar funcionários"),
+('Técnico de TI','Pode visualizar a dashboard e adicionar uma nova máquina');
 
 -- Adicionando os monitoramentos
 INSERT INTO HealthGuard.MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALUES
@@ -17,7 +17,11 @@ INSERT INTO HealthGuard.MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALU
 ('Memória SWAP Total','GB'),
 ('Uso de disco','%'),
 ('Conexão com a rede','I/O'),
-('Frequência Máxima de CPU','Mhz');
+('Frequência Máxima de CPU','Mhz'),
+('Tempo de atividade','Tempo'),
+('Espaço livre do disco','GB'),
+('IOPS','operaçãoes/s'),
+('Partição de Disco','JSON');
 
 -- Inserções na tabela UnidadeDeAtendimento
 INSERT INTO HealthGuard.UnidadeDeAtendimento (razaoSocial, nomeFantasia, cnpj, unidadeGestora) VALUES 
@@ -50,67 +54,18 @@ INSERT INTO HealthGuard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMed
 (1,1,9),
 (1,1,10),
 (1,1,11),
-(1,1,12);
+(1,1,12),
+(1,1,13),
+(1,1,14),
+(1,1,15);
 
 INSERT INTO HealthGuard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataExpiracao, statusCodigoValidacaoUsuario,emailSugerido,nomeSugerido) VALUES
 -- Convites para utilização
-(1, 1, '1234567890','2026-01-01 23:59:00', 'Pendente',"arthur.amahals1000@gmail.com","Arthur Felipe Amaral da Silva"),
-(1, 2, '0987654321','2026-01-01 23:59:00', 'Pendente',"yuri.boechat@sptech.school","Yuri boechat da Silva");
-
--- Inserção de máquinas DAC
-INSERT INTO HealthGuard.Dac (fkUnidadeDeAtendimento, nomeIdentificacao, statusDac, codigoValidacao) VALUES
-(1, 'Maquina A-02', 'Ativo', 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6'),
-(1, 'Maquina A-03', 'Ativo', 'q9r8s7t6u5v4w3x2y1z0a1b2c3d4e5f6'),
-(1, 'Maquina A-04', 'Ativo', 'g7h8i9j0k1l2m3n4o5p6q9r8s7t6u5v4'),
-(1, 'Maquina A-05', 'Inativo', 'w3x2y1z0a1b2c3d4e5f6g7h8i9j0k1l2'),
-(1, 'Maquina A-06', 'Ativo', 'm3n4o5p6q9r8s7t6u5v4w3x2y1z0a1b2'),
-(1, 'Maquina A-07', 'Ativo', 'c3d4e5f6g7h8i9j0k1l2m3n4o5p6q9r8'),
-(1, 'Maquina A-08', 'Alerta', 's7t6u5v4w3x2y1z0a1b2c3d4e5f6g7h8'),
-(1, 'Maquina A-09', 'Ativo', 'i9j0k1l2m3n4o5p6q9r8s7t6u5v4w3x2'),
-(1, 'Maquina A-10', 'Ativo', 'y1z0a1b2c3d4e5f6g7h8i9j0k1l2m3n4'),
-(1, 'Maquina B-01', 'Ativo', 'o5p6q9r8s7t6u5v4w3x2y1z0a1b2c3d4'),
-(1, 'Maquina B-02', 'Ativo', 'e5f6g7h8i9j0k1l2m3n4o5p6q9r8s7t6'),
-(1, 'Maquina B-03', 'Excluido', 'u5v4w3x2y1z0a1b2c3d4e5f6g7h8i9j0'),
-(1, 'Maquina B-04', 'Ativo', 'k1l2m3n4o5p6q9r8s7t6u5v4w3x2y1z0'),
-(1, 'Maquina B-05', 'Ativo', 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6'),
-(1, 'Maquina B-06', 'Ativo', 'q9r8s7t6u5v4w3x2y1z0a1b2c3d4e5f6'),
-(1, 'Maquina B-07', 'Em configuração', 'g7h8i9j0k1l2m3n4o5p6q9r8s7t6u5v4'),
-(1, 'Maquina B-08', 'Ativo', 'w3x2y1z0a1b2c3d4e5f6g7h8i9j0k1l2'),
-(1, 'Maquina B-09', 'Ativo', 'm3n4o5p6q9r8s7t6u5v4w3x2y1z0a1b2'),
-(1, 'Maquina C-01', 'Ativo', 'c3d4e5f6g7h8i9j0k1l2m3n4o5p6q9r8'),
-(1, 'Maquina C-02', 'Ativo', 's7t6u5v4w3x2y1z0a1b2c3d4e5f6g7h8'),
-(1, 'Maquina C-03', 'Ativo', 'i9j0k1l2m3n4o5p6q9r8s7t6u5v4w3x2'),
-(1, 'Maquina C-04', 'Ativo', 'y1z0a1b2c3d4e5f6g7h8i9j0k1l2m3n4'),
-(1, 'Maquina C-05', 'Inativo', 'o5p6q9r8s7t6u5v4w3x2y1z0a1b2c3d4'),
-(1, 'Maquina C-06', 'Ativo', 'e5f6g7h8i9j0k1l2m3n4o5p6q9r8s7t6'),
-(1, 'Maquina C-07', 'Ativo', 'u5v4w3x2y1z0a1b2c3d4e5f6g7h8i9j0'),
-(1, 'Maquina C-08', 'Ativo', 'k1l2m3n4o5p6q9r8s7t6u5v4w3x2y1z0'),
-(1, 'Maquina C-09', 'Alerta', 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6'),
-(1, 'Maquina D-01', 'Ativo', 'q9r8s7t6u5v4w3x2y1z0a1b2c3d4e5f6'),
-(1, 'Maquina D-02', 'Ativo', 'g7h8i9j0k1l2m3n4o5p6q9r8s7t6u5v4'),
-(1, 'Maquina D-03', 'Ativo', 'w3x2y1z0a1b2c3d4e5f6g7h8i9j0k1l2'),
-(1, 'Maquina D-04', 'Ativo', 'm3n4o5p6q9r8s7t6u5v4w3x2y1z0a1b2'),
-(1, 'Maquina D-05', 'Ativo', 'c3d4e5f6g7h8i9j0k1l2m3n4o5p6q9r8'),
-(1, 'Maquina D-06', 'Excluido', 's7t6u5v4w3x2y1z0a1b2c3d4e5f6g7h8'),
-(1, 'Maquina D-07', 'Ativo', 'i9j0k1l2m3n4o5p6q9r8s7t6u5v4w3x2'),
-(1, 'Maquina D-08', 'Ativo', 'y1z0a1b2c3d4e5f6g7h8i9j0k1l2m3n4'),
-(1, 'Maquina D-09', 'Ativo', 'o5p6q9r8s7t6u5v4w3x2y1z0a1b2c3d4'),
-(1, 'Maquina E-01', 'Ativo', 'e5f6g7h8i9j0k1l2m3n4o5p6q9r8s7t6'),
-(1, 'Maquina E-02', 'Em configuração', 'u5v4w3x2y1z0a1b2c3d4e5f6g7h8i9j0'),
-(1, 'Maquina E-03', 'Ativo', 'k1l2m3n4o5p6q9r8s7t6u5v4w3x2y1z0'),
-(1, 'Maquina E-04', 'Ativo', 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6'),
-(1, 'Maquina E-05', 'Ativo', 'q9r8s7t6u5v4w3x2y1z0a1b2c3d4e5f6'),
-(1, 'Maquina E-06', 'Ativo', 'g7h8i9j0k1l2m3n4o5p6q9r8s7t6u5v4'),
-(1, 'Maquina E-07', 'Ativo', 'w3x2y1z0a1b2c3d4e5f6g7h8i9j0k1l2'),
-(1, 'Maquina E-08', 'Ativo', 'm3n4o5p6q9r8s7t6u5v4w3x2y1z0a1b2'),
-(1, 'Maquina E-09', 'Ativo', 'c3d4e5f6g7h8i9j0k1l2m3n4o5p6q9r8'),
-(1, 'Maquina F-01', 'Ativo', 's7t6u5v4w3x2y1z0a1b2c3d4e5f6g7h8'),
-(1, 'Maquina F-02', 'Inativo', 'i9j0k1l2m3n4o5p6q9r8s7t6u5v4w3x2'),
-(1, 'Maquina F-03', 'Ativo', 'y1z0a1b2c3d4e5f6g7h8i9j0k1l2m3n4'),
-(1, 'Maquina F-04', 'Alerta', 'o5p6q9r8s7t6u5v4w3x2y1z0a1b2c3d4'),
-(1, 'Maquina F-05', 'Ativo', 'e5f6g7h8i9j0k1l2m3n4o5p6q9r8s7t6');
-
-
-
-
-
+(1, 1, '1111111111','2026-01-01 23:59:00', 'Pendente',"andre.leao@sptech.school","André Augusto Corado Leão"),
+(1, 1, '2222222222','2026-01-01 23:59:00', 'Pendente',"arthur.asilva@sptech.school","Arthur Felipe Amaral da Silva"),
+(1, 1, '3333333333','2026-01-01 23:59:00', 'Pendente',"davi.caproni@sptech.school","Davi Escudero Caproni"),
+(1, 1, '4444444444','2026-01-01 23:59:00', 'Pendente',"giovanna.andrade@sptech.school","Giovanna Prado Andrade"),
+(1, 1, '5555555555','2026-01-01 23:59:00', 'Pendente',"marcela.vicente@sptech.school","Marcela Bastos Vicente"),
+(1, 1, '6666666666','2026-01-01 23:59:00', 'Pendente',"rafael.corso@sptech.school","Rafael Fratini Dal Corso"),
+(1, 1, '7777777777','2026-01-01 23:59:00', 'Pendente',"rodrigo.trindade@healthguard.com","Rodrigo Trindade da Cunha"),
+(1, 2, '8888888888','2026-01-01 23:59:00', 'Pendente',"angela.martins@healthguard.com","Ângela Martins Reis");
