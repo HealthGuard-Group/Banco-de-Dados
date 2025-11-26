@@ -193,16 +193,16 @@ CREATE TABLE Leitura (
 
 CREATE TABLE Alerta (
     idAlerta INT AUTO_INCREMENT,
-    fkLeitura INT,
-    fkDac INT,
-    fkMedicoesSelecionadas INT,
     fkUnidadeDeAtendimento INT,
     fkMedicoesDisponiveis INT,
-    statusVisto VARCHAR(100) DEFAULT 'Não verificado',
-    CONSTRAINT pkCompostaAlerta PRIMARY KEY (idAlerta, fkLeitura, fkDac, fkMedicoesSelecionadas, fkUnidadeDeAtendimento, fkMedicoesDisponiveis),
-    dataDoAlerta DATETIME DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fkAlerta_Leitura FOREIGN KEY (fkLeitura, fkUnidadeDeAtendimento, fkMedicoesDisponiveis, fkDac, fkMedicoesSelecionadas)
-        REFERENCES Leitura(idLeitura, fkUnidadeDeAtendimento, fkMedicoesDisponiveis, fkDac, fkMedicoesSelecionadas)
+    fkDac INT,
+    fkMedicoesSelecionadas INT,
+    CONSTRAINT pkCompostaAlerta PRIMARY KEY (idAlerta, fkUnidadeDeAtendimento, fkMedicoesDisponiveis, fkDac, fkMedicoesSelecionadas),
+    pico VARCHAR(100),
+    dataInicio DATETIME DEFAULT CURRENT_TIMESTAMP,
+    dataTermino DATETIME NULL,
+    CONSTRAINT fkAlerta_MedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento)
+        REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento)
 );
 
 CREATE TABLE MetricaAlerta (
