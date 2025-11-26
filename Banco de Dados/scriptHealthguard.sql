@@ -198,6 +198,7 @@ CREATE TABLE Alerta (
     fkMedicoesSelecionadas INT,
     fkUnidadeDeAtendimento INT,
     fkMedicoesDisponiveis INT,
+    statusVisto VARCHAR(100) DEFAULT 'Não verificado',
     CONSTRAINT pkCompostaAlerta PRIMARY KEY (idAlerta, fkLeitura, fkDac, fkMedicoesSelecionadas, fkUnidadeDeAtendimento, fkMedicoesDisponiveis),
     dataDoAlerta DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fkAlerta_Leitura FOREIGN KEY (fkLeitura, fkUnidadeDeAtendimento, fkMedicoesDisponiveis, fkDac, fkMedicoesSelecionadas)
@@ -215,7 +216,6 @@ CREATE TABLE MetricaAlerta (
     valorMinimo FLOAT,
     valorMaximo FLOAT,
     dataCriacao DATETIME DEFAULT CURRENT_TIMESTAMP,
-    statusVisto VARCHAR(100) DEFAULT 'Não visto',
     CONSTRAINT fkMetricaAlertaMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesDisponiveis(idMedicoesDisponiveis),
     CONSTRAINT fkMetricaAlertaUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento),
     CONSTRAINT fkMetricaAlerta_Dac FOREIGN KEY (fkDac, fkUnidadeDeAtendimentoDac) 
