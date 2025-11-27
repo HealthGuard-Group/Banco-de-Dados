@@ -1,3 +1,4 @@
+
 DROP DATABASE IF EXISTS HealthGuard;
 CREATE DATABASE IF NOT EXISTS HealthGuard;
 USE HealthGuard;
@@ -201,6 +202,7 @@ CREATE TABLE Alerta (
     pico VARCHAR(100),
     dataInicio DATETIME DEFAULT CURRENT_TIMESTAMP,
     dataTermino DATETIME NULL,
+    statusAlerta VARCHAR(100) default "Não verificado", 
     CONSTRAINT fkAlerta_MedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento)
         REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento)
 );
