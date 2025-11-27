@@ -21,7 +21,8 @@ INSERT INTO HealthGuard.MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALU
 ('Tempo de atividade','Tempo'),
 ('Espaço livre do disco','GB'),
 ('IOPS','operaçãoes/s'),
-('Partição de Disco','JSON');
+('Partição de Disco','JSON'),
+('Ranking processos','JSON');
 
 -- Inserções na tabela UnidadeDeAtendimento
 INSERT INTO HealthGuard.UnidadeDeAtendimento (razaoSocial, nomeFantasia, cnpj, unidadeGestora) VALUES 
@@ -53,7 +54,8 @@ INSERT INTO HealthGuard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMed
 (1,1,13),
 (1,1,14),
 (1,1,15),
-(1,1,16);
+(1,1,16),
+(1,1,17);
 
 INSERT INTO MetricaAlerta VALUES
 (DEFAULT,1,1,DEFAULT,DEFAULT,"Atenção",70.00,85.00,DEFAULT),
