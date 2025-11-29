@@ -57,13 +57,13 @@ INSERT INTO HealthGuard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMed
 (1,1,16),
 (1,1,17);
 
-INSERT INTO MetricaAlerta VALUES
-(DEFAULT,1,1,DEFAULT,DEFAULT,"Atenção",70.00,85.00,DEFAULT),
-(DEFAULT,1,1,DEFAULT,DEFAULT,"Alerta",85.01,100.00,DEFAULT),
-(DEFAULT,6,1,DEFAULT,DEFAULT,"Atenção",70.00,85.00,DEFAULT),
-(DEFAULT,6,1,DEFAULT,DEFAULT,"Alerta",85.01,100.00,DEFAULT),
-(DEFAULT,10,1,DEFAULT,DEFAULT,"Atenção",70.00,85.00,DEFAULT),
-(DEFAULT,10,1,DEFAULT,DEFAULT,"Alerta",85.01,100.00,DEFAULT);
+INSERT INTO MetricaAlerta(fkMedicoesDisponiveis,fkUnidadeDeAtendimento,nomeNivel,valorMinimo,valorMaximo) VALUES
+(1,1,"Atenção",70.00,85.00),
+(1,1,"Alerta",85.01,100.00),
+(6,1,"Atenção",70.00,85.00),
+(6,1,"Alerta",85.01,100.00),
+(10,1,"Atenção",70.00,85.00),
+(10,1,"Alerta",85.01,100.00);
 
 INSERT INTO HealthGuard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataExpiracao, statusCodigoValidacaoUsuario,emailSugerido,nomeSugerido) VALUES
 -- Convites para utilização

@@ -203,6 +203,9 @@ CREATE TABLE Alerta (
     dataInicio DATETIME DEFAULT CURRENT_TIMESTAMP,
     dataTermino DATETIME NULL,
     statusAlerta VARCHAR(100) default "Não verificado", 
+    dataVisualizacao DATETIME DEFAULT NULL,
+    nomeVisualizador VARCHAR(100),
+    nomeAlerta VARCHAR(100),
     CONSTRAINT fkAlerta_MedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento)
         REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento)
 );
