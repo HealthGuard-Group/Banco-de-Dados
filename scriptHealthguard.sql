@@ -8,7 +8,9 @@ CREATE TABLE UnidadeDeAtendimento (
     razaoSocial VARCHAR(100) NOT NULL,
     nomeFantasia VARCHAR(100) NOT NULL,
     cnpj CHAR(14) NOT NULL,
-    unidadeGestora VARCHAR(100) NOT NULL
+    unidadeGestora VARCHAR(100) NOT NULL,
+    tokenSlack VARCHAR(100),
+    canalSlack VARCHAR(100)
 );
 
 CREATE TABLE TipoDeContato (
