@@ -160,6 +160,7 @@ CREATE TABLE Dac (
     statusDac VARCHAR(100) DEFAULT "Em configuração",
     CONSTRAINT chkStatusDac CHECK (statusDac in("Ativo","Inativo","Excluido","Alerta","Em configuração")),
     codigoValidacao VARCHAR(256) NOT NULL,
+    recomendacaoIA VARCHAR(500),
     CONSTRAINT fkDacUnidadeDeAtendimento FOREIGN KEY (fkUnidadeDeAtendimento) REFERENCES UnidadeDeAtendimento(idUnidadeDeAtendimento)
 );
 
