@@ -22,7 +22,8 @@ INSERT INTO HealthGuard.MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALU
 ('Espaço livre do disco','GB'),
 ('IOPS','operaçãoes/s'),
 ('Partição de Disco','JSON'),
-('Ranking processos','JSON');
+('Ranking processos','JSON'),
+('Porcentagem CPU - nucleo', 'JSON');
 
 -- Inserções na tabela UnidadeDeAtendimento
 INSERT INTO HealthGuard.UnidadeDeAtendimento (razaoSocial, nomeFantasia, cnpj, unidadeGestora) VALUES 
