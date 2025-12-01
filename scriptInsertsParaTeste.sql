@@ -27,7 +27,10 @@ INSERT INTO HealthGuard.MedicoesDisponiveis (nomeDaMedicao,unidadeDeMedida) VALU
 
 -- Inserções na tabela UnidadeDeAtendimento
 INSERT INTO HealthGuard.UnidadeDeAtendimento (razaoSocial, nomeFantasia, cnpj, unidadeGestora) VALUES 
-('HealthGuard LTDA', 'HealthGuard', '12345678000195', 'Secretaria da Saúde');
+('Saúde Integral Diagnósticos Ltda', 'Centro de Diagnóstico Integral', '12345678000195', 'Secretaria da Saúde'),
+('Bem Estar Hospitalar S.A', 'Hospital Bem Estar', '98765432000177', 'Secretaria da Saúde'),
+('Nova Esperança Terapias e Reabilitação Ltda.', 'Reabilitar Nova Esperança', '45678912000103', 'Instituição privada'),
+('Vida Plena Serviços Médicos Ltda', 'Clínica Vida Plena', '85296374000166', 'Secretaria da Saúde');
 
 -- Inserções na tabela CodigoConfiguracao
 INSERT INTO HealthGuard.CodigoConfiguracaoMaquina (fkUnidadeDeAtendimento, codigo, dataExpiracao,statusCodigoConfiguracaoMaquina) VALUES
@@ -59,12 +62,12 @@ INSERT INTO HealthGuard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMed
 (1,1,17);
 
 INSERT INTO MetricaAlerta(fkMedicoesDisponiveis,fkUnidadeDeAtendimento,nomeNivel,valorMinimo,valorMaximo) VALUES
-(1,1,"Atenção",70.00,85.00),
-(1,1,"Alerta",85.01,100.00),
-(6,1,"Atenção",70.00,85.00),
-(6,1,"Alerta",85.01,100.00),
-(10,1,"Atenção",70.00,85.00),
-(10,1,"Alerta",85.01,100.00);
+(1,1,"Atenção",58.00,78.49),
+(1,1,"Alerta",78.50,100.00),
+(6,1,"Atenção",91.9,99.00),
+(6,1,"Alerta",99.01,100.00),
+(10,1,"Atenção",70.00,80.00),
+(10,1,"Alerta",80.01,100.00);
 
 INSERT INTO HealthGuard.CodigoValidacaoUsuario(fkUnidadeDeAtendimento, fkPermissoes, codigo, dataExpiracao, statusCodigoValidacaoUsuario,emailSugerido,nomeSugerido) VALUES
 -- Convites para utilização
