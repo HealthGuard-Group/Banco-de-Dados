@@ -59,7 +59,8 @@ INSERT INTO HealthGuard.MedicoesSelecionadas (fkUnidadeDeAtendimento,fkDac,fkMed
 (1,1,14),
 (1,1,15),
 (1,1,16),
-(1,1,17);
+(1,1,17),
+(1,1,18);
 
 INSERT INTO MetricaAlerta(fkMedicoesDisponiveis,fkUnidadeDeAtendimento,nomeNivel,valorMinimo,valorMaximo) VALUES
 (1,1,"Atenção",58.00,78.49),

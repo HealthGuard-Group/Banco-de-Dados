@@ -179,7 +179,7 @@ CREATE TABLE MedicoesSelecionadas (
     dataConfiguracao DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fkMedicoesSelecionadas_Dac FOREIGN KEY (fkDac, fkUnidadeDeAtendimento) 
         REFERENCES Dac(idDac, fkUnidadeDeAtendimento),
-    CONSTRAINT fkMedicoesSelecionadasMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesDisponiveis(idMedicoesDisponiveis)
+    CONSTRAINT fkMedicoesSelecionadasMedicoesDisponiveis FOREIGN KEY (fkMedicoesDisponiveis) REFERENCES MedicoesDisponiveis(idMedicoesDisponiveis) ON DELETE CASCADE
 );
 
 CREATE TABLE Leitura (
@@ -192,7 +192,7 @@ CREATE TABLE Leitura (
     medidaCapturada VARCHAR(500),
     dataCaptura DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fkLeitura_MedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento)
-        REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento)
+        REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento) ON DELETE CASCADE
 );
 
 CREATE TABLE Alerta (
@@ -210,7 +210,7 @@ CREATE TABLE Alerta (
     nomeVisualizador VARCHAR(100),
     nomeAlerta VARCHAR(100),
     CONSTRAINT fkAlerta_MedicoesSelecionadas FOREIGN KEY (fkMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento)
-        REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento)
+        REFERENCES MedicoesSelecionadas(idMedicoesSelecionadas, fkMedicoesDisponiveis, fkDac, fkUnidadeDeAtendimento) ON DELETE CASCADE
 );
 
 CREATE TABLE MetricaAlerta (
